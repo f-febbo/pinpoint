@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { AskPanel, FollowupsPanel, HistoryPanel, SearchPanel, TodayPanel } from "./showcase-panels";
 import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";

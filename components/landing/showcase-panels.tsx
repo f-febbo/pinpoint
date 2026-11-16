@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
 
@@ -35,7 +36,8 @@ const QUERY = "Find the conversation where we discussed next quarter's budget.";
 
 export function SearchPanel() {
   const reduce = useReducedMotion();
-  const [typed, setTyped] = useState(reduce ? QUERY.length : 0);
+  const [typedRaw, setTyped] = useState(0);
+  const typed = reduce ? QUERY.length : typedRaw;
 
   useEffect(() => {
     if (reduce) return;

@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useInView, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
+import { AnimatePresence, motion, useInView } from "motion/react";
 import { useRef, useState, type ReactNode } from "react";
 import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
 
