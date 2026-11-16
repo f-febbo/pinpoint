@@ -21,7 +21,7 @@ export function FragmentCard({
 }) {
   return (
     <div
-      className={`relative rounded-[10px] border-[1.5px] border-ink bg-[#fcfbf7] px-3 py-2.5 shadow-[3px_3px_0_var(--color-ink)] ${className}`}
+      className={`relative rounded-[10px] border-[1.5px] border-ink bg-card px-3 py-2.5 shadow-[3px_3px_0_var(--color-ink)] ${className}`}
     >
       <div className="flex items-center gap-1.5 text-[0.7rem] text-stone sm:text-xs">
         <SourceGlyph kind={f.kind} className="size-3.5 shrink-0 text-ink" />
@@ -30,7 +30,7 @@ export function FragmentCard({
           <span
             className={`ml-auto rounded-full px-2 py-px text-[0.66rem] font-semibold transition-all duration-500 sm:text-[0.7rem] ${
               showTag ? "opacity-100" : "opacity-0"
-            } ${f.urgent ? "bg-pin text-ink" : "bg-paper-2 text-ink-3"}`}
+            } ${f.urgent ? "bg-lime text-ink" : "bg-paper-2 text-ink-3"}`}
           >
             {f.tag}
           </span>

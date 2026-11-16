@@ -46,7 +46,7 @@ export function PinIcon({ hovered = false, locked = false, pulseKey = 0, classNa
             cx="120"
             cy="224"
             ry="8.5"
-            fill="var(--color-pin)"
+            fill="var(--color-lime)"
             stroke="var(--color-ink)"
             strokeWidth="3"
             initial={false}

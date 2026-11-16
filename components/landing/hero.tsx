@@ -42,27 +42,26 @@ const scatterNarrow: Record<string, Pos> = {
 export function Hero() {
   const reduce = useReducedMotion();
   const wide = useMediaQuery("(min-width: 640px)", true);
-  const [organized, setOrganized] = useState(false);
+  const [autoSorted, setAutoSorted] = useState(false);
+  const [choice, setChoice] = useState<boolean | null>(null);
   const [hovered, setHovered] = useState(false);
   const [pulse, setPulse] = useState(0);
-  const [touched, setTouched] = useState(false);
+  const touched = choice !== null;
+  // with reduced motion, start sorted; otherwise the intro sorts it
+  const organized = choice ?? (reduce ? true : autoSorted);
 
   // One orchestrated moment: shortly after load, the pin pulls everything into order.
   useEffect(() => {
-    if (reduce) {
-      setOrganized(true);
-      return;
-    }
+    if (reduce) return;
     const t = setTimeout(() => {
-      setOrganized(true);
+      setAutoSorted(true);
       setPulse((p) => p + 1);
     }, 1700);
     return () => clearTimeout(t);
   }, [reduce]);
 
   const toggle = () => {
-    setTouched(true);
-    setOrganized((o) => !o);
+    setChoice(!organized);
     setPulse((p) => p + 1);
   };
 

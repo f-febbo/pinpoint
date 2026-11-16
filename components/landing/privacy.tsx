@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 function Node({ children, tone = "plain", sub }: { children: ReactNode; tone?: "plain" | "pin" | "risk" | "off"; sub?: string }) {
   const tones = {
     plain: "border-paper/80 bg-ink-2 text-paper",
-    pin: "border-pin bg-pin text-ink",
+    pin: "border-lime bg-lime text-ink",
     risk: "border-paper/60 bg-transparent text-paper",
     off: "border-dashed border-stone-light/70 bg-transparent text-stone-light",
   };
@@ -69,19 +69,19 @@ export function Privacy() {
             <Node tone="risk">Answer comes back</Node>
           </figure>
 
-          <figure className="rounded-[20px] border-[1.5px] border-pin p-5 sm:p-8">
+          <figure className="rounded-[20px] border-[1.5px] border-lime p-5 sm:p-8">
             <figcaption className="mb-6">
               <p className="font-display text-2xl font-bold">pinpoint&rsquo;s proposed approach</p>
               <p className="mt-1 text-sm text-stone-light">Processing happens where your information already lives.</p>
             </figcaption>
-            <div className="rounded-xl border-[1.5px] border-dashed border-pin p-3 pb-4">
-              <p className="mb-2 text-xs text-pin">Your environment</p>
+            <div className="rounded-xl border-[1.5px] border-dashed border-lime p-3 pb-4">
+              <p className="mb-2 text-xs text-lime">Your environment</p>
               <Node sub="Mail, docs, chat, calendar">Your apps</Node>
-              <Link color="var(--color-pin)" delay="0s" />
+              <Link color="var(--color-lime)" delay="0s" />
               <Node sub="Respects each app's access rules and your organization's policies">Permission check</Node>
-              <Link color="var(--color-pin)" delay="0.8s" />
+              <Link color="var(--color-lime)" delay="0.8s" />
               <Node tone="pin" sub="Model runs on your device or your company's servers">Local inference</Node>
-              <Link color="var(--color-pin)" delay="1.6s" />
+              <Link color="var(--color-lime)" delay="1.6s" />
               <Node sub="With links back to every source">Answer</Node>
             </div>
             <div className="mt-4">

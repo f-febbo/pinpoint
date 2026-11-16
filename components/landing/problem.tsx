@@ -95,7 +95,7 @@ function Piece({ item, i, p }: { item: Item; i: number; p: MotionValue<number> }
       className="absolute w-[14.5rem] sm:w-[19rem]"
       style={{ left, top, rotate, opacity, scale, x: "-50%", y: "-50%" }}
     >
-      <div className="rounded-[10px] border-[1.5px] border-ink bg-[#fcfbf7] px-3.5 py-3 shadow-[3px_3px_0_var(--color-ink)]">
+      <div className="rounded-[10px] border-[1.5px] border-ink bg-card px-3.5 py-3 shadow-[3px_3px_0_var(--color-ink)]">
         <div className="flex items-center gap-1.5 text-xs text-stone">
           <SourceGlyph kind={item.kind} className="size-3.5 text-ink" />
           {sourceLabel[item.kind]}
@@ -105,7 +105,7 @@ function Piece({ item, i, p }: { item: Item; i: number; p: MotionValue<number> }
         {item.resolved && (
           <motion.p
             style={{ opacity: tag }}
-            className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-pin px-2 py-0.5 text-[0.7rem] font-semibold sm:text-xs"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-lime px-2 py-0.5 text-[0.7rem] font-semibold sm:text-xs"
           >
             <span className="size-1.5 rounded-full bg-ink" />
             {item.resolved}
@@ -167,7 +167,7 @@ export function Problem() {
               >
                 <div className="flex items-center justify-between border-b-[1.5px] border-ink px-4 py-2.5">
                   <span className="font-display text-lg font-bold">Needs you</span>
-                  <span className="grid size-7 place-items-center rounded-full border-[1.5px] border-ink bg-pin text-sm font-bold">
+                  <span className="grid size-7 place-items-center rounded-full border-[1.5px] border-ink bg-lime text-sm font-bold">
                     4
                   </span>
                 </div>

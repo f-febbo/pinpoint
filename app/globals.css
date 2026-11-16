@@ -1,19 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f4f1e9;
-  --color-paper-2: #ebe7dc;
-  --color-paper-3: #e2ddcf;
-  --color-ink: #1e1d1b;
-  --color-ink-2: #2c2b28;
-  --color-ink-3: #3a3935;
-  --color-stone: #67635a;
-  --color-stone-light: #a7a296;
-  --color-line: #d9d4c7;
-  --color-line-dark: #45433e;
-  --color-pin: #ffc21a;
-  --color-pin-deep: #e09c00;
-  --color-pin-soft: #ffe7a3;
+  --color-paper: #f5f6ef;
+  --color-paper-2: #e9ede3;
+  --color-paper-3: #dde3d6;
+  --color-card: #fdfefa;
+  --color-ink: #071b53;
+  --color-ink-2: #0f2766;
+  --color-ink-3: #24356b;
+  --color-stone: #4f5b7d;
+  --color-stone-light: #a3afcb;
+  --color-line: #d5dbe0;
+  --color-line-dark: #263c7c;
+  /* brand sky: the pin, buttons, active states */
+  --color-pin: #6cc4fe;
+  --color-pin-deep: #3a9be3;
+  --color-pin-soft: #cdeaff;
+  /* lime: the highlighter for what matters */
+  --color-lime: #e3fb99;
+  --color-lime-deep: #c4e367;
 
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
@@ -54,7 +59,7 @@ body {
 }
 .on-dark :focus-visible,
 .on-dark:focus-visible {
-  outline-color: var(--color-pin);
+  outline-color: var(--color-lime);
 }
 
 @media (prefers-reduced-motion: reduce) {

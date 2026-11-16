@@ -95,7 +95,7 @@ export function Showcase() {
         </div>
 
         {/* the mockup */}
-        <div className="mt-5 overflow-hidden rounded-[18px] border-[1.5px] border-ink bg-[#fcfbf7] shadow-[6px_6px_0_var(--color-ink)]">
+        <div className="mt-5 overflow-hidden rounded-[18px] border-[1.5px] border-ink bg-card shadow-[6px_6px_0_var(--color-ink)]">
           <div className="flex items-center gap-4 border-b-[1.5px] border-ink px-4 py-3 sm:px-5">
             <span className="text-xl leading-none">
               <Wordmark />

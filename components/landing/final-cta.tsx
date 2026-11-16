@@ -24,7 +24,7 @@ export function FinalCta() {
   };
 
   return (
-    <section id="early-access" aria-labelledby="cta-title" className="border-y-[1.5px] border-ink bg-pin">
+    <section id="early-access" aria-labelledby="cta-title" className="border-y-[1.5px] border-ink bg-lime">
       <div className="mx-auto max-w-[1320px] px-5 py-20 sm:px-8 sm:py-28">
         <h2 id="cta-title" className="display text-[clamp(3.4rem,14vw,10rem)] font-extrabold leading-[0.88]">
           Less searching.
@@ -51,11 +51,11 @@ export function FinalCta() {
                 }}
                 aria-invalid={state === "invalid"}
                 placeholder="you@company.com"
-                className="min-w-0 flex-1 rounded-full border-[1.5px] border-ink bg-[#fffaf0] px-5 py-3.5 text-lg outline-none placeholder:text-stone focus-visible:shadow-[0_0_0_3px_var(--color-ink)]"
+                className="min-w-0 flex-1 rounded-full border-[1.5px] border-ink bg-[var(--color-card)] px-5 py-3.5 text-lg outline-none placeholder:text-stone focus-visible:shadow-[0_0_0_3px_var(--color-ink)]"
               />
               <button
                 type="submit"
-                className="rounded-full border-[1.5px] border-ink bg-ink px-7 py-3.5 text-lg font-semibold text-paper shadow-[3px_3px_0_#fffaf0] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[4px_5px_0_#fffaf0] active:translate-y-px active:shadow-none"
+                className="rounded-full border-[1.5px] border-ink bg-ink px-7 py-3.5 text-lg font-semibold text-paper shadow-[3px_3px_0_var(--color-card)] transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-[4px_5px_0_var(--color-card)] active:translate-y-px active:shadow-none"
               >
                 Get early access
               </button>

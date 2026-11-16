@@ -28,7 +28,7 @@ function FindVisual() {
   const [i, setI] = useState(0);
   const f = finds[i];
   return (
-    <div className="rounded-[18px] border-[1.5px] border-ink bg-[#fcfbf7] p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
+    <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
       <p className="text-sm text-stone">Pick something half-remembered</p>
       <div className="mt-3 flex flex-wrap gap-2">
         {finds.map((x, n) => (
@@ -84,7 +84,7 @@ function AheadVisual() {
 
   return (
     <div ref={ref} className="space-y-5">
-      <div className="max-w-md rounded-2xl rounded-bl-md border-[1.5px] border-ink bg-[#fcfbf7] p-4">
+      <div className="max-w-md rounded-2xl rounded-bl-md border-[1.5px] border-ink bg-card p-4">
         <p className="flex items-center gap-1.5 text-xs text-stone">
           <SourceGlyph kind="chat" className="size-3.5 text-ink" />
           Lena in #ops, reply 31 of 38
@@ -94,7 +94,7 @@ function AheadVisual() {
           <span className="relative whitespace-nowrap">
             <motion.span
               aria-hidden
-              className="absolute inset-x-[-2px] inset-y-[1px] origin-left rounded-[3px] bg-pin"
+              className="absolute inset-x-[-2px] inset-y-[1px] origin-left rounded-[3px] bg-lime"
               initial={false}
               animate={{ scaleX: on ? 1 : 0 }}
               transition={{ duration: 0.6, delay: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -105,7 +105,7 @@ function AheadVisual() {
         </p>
       </div>
 
-      <div className="rounded-[18px] border-[1.5px] border-ink bg-[#fcfbf7] p-4 shadow-[5px_5px_0_var(--color-ink)] sm:p-5">
+      <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-4 shadow-[5px_5px_0_var(--color-ink)] sm:p-5">
         <p className="mb-3 font-semibold">This week</p>
         <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
           {days.map((d, n) => (
@@ -145,7 +145,7 @@ function ContextVisual() {
   const [i, setI] = useState(3);
   const reduce = useReducedMotion();
   return (
-    <div className="rounded-[18px] border-[1.5px] border-ink bg-[#fcfbf7] p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
+    <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
       <p className="text-sm text-stone">Why did offline mode move to the second release?</p>
       <div className="relative mt-6">
         <div aria-hidden className="absolute left-0 right-0 top-[18px] h-[1.5px] bg-ink" />
@@ -206,7 +206,7 @@ function OwnVisual() {
   const markerX = [17, 50, 84][idx];
 
   return (
-    <div className="rounded-[18px] border-[1.5px] border-ink bg-[#fcfbf7] p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
+    <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
       <fieldset>
         <legend className="text-sm text-stone">Where should AI processing happen?</legend>
         <div className="mt-3 grid grid-cols-3 gap-1 rounded-xl border-[1.5px] border-ink bg-paper-2 p-1">
@@ -234,7 +234,7 @@ function OwnVisual() {
       <div className="relative mt-6 h-[150px]" aria-hidden>
         {/* environment boundary covers device + company */}
         <div className="absolute inset-y-0 left-0 w-[67%] rounded-xl border-[1.5px] border-dashed border-ink" />
-        <span className="absolute -top-2.5 left-3 bg-[#fcfbf7] px-1.5 text-xs font-semibold">Your environment</span>
+        <span className="absolute -top-2.5 left-3 bg-card px-1.5 text-xs font-semibold">Your environment</span>
         <div className="absolute inset-y-6 right-0 w-[30%] rounded-xl border-[1.5px] border-line bg-paper-2" />
         {[
           { x: 17, t: "Laptop" },

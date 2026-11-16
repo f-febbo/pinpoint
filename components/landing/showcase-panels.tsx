@@ -8,7 +8,7 @@ import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
 /* ---------- shared bits ---------- */
 
 function Mark({ children }: { children: ReactNode }) {
-  return <mark className="rounded-[3px] bg-pin-soft px-0.5 text-ink">{children}</mark>;
+  return <mark className="rounded-[3px] bg-lime px-0.5 text-ink">{children}</mark>;
 }
 
 function Source({ kind, where }: { kind: SourceKind; where?: string }) {
@@ -223,7 +223,7 @@ export function FollowupsPanel() {
                 >
                   {checked && (
                     <svg viewBox="0 0 12 12" className="size-3">
-                      <path d="M2.5 6.5l2.2 2L9.5 3.5" stroke="var(--color-pin)" strokeWidth="2" fill="none" strokeLinecap="round" />
+                      <path d="M2.5 6.5l2.2 2L9.5 3.5" stroke="var(--color-lime)" strokeWidth="2" fill="none" strokeLinecap="round" />
                     </svg>
                   )}
                 </span>
