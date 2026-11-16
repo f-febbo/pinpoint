@@ -101,7 +101,7 @@ function Piece({ item, i, p }: { item: Item; i: number; p: MotionValue<number> }
           {sourceLabel[item.kind]}
         </div>
         <p className="mt-1 truncate text-sm font-semibold sm:text-[0.95rem]">{item.title}</p>
-        <p className="truncate text-xs text-stone sm:text-sm">{item.detail}</p>
+        <p className="hidden truncate text-xs text-stone sm:block sm:text-sm">{item.detail}</p>
         {item.resolved && (
           <motion.p
             style={{ opacity: tag }}

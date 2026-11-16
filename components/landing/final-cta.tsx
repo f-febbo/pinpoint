@@ -26,7 +26,7 @@ export function FinalCta() {
   return (
     <section id="early-access" aria-labelledby="cta-title" className="border-y-[1.5px] border-ink bg-pin">
       <div className="mx-auto max-w-[1320px] px-5 py-20 sm:px-8 sm:py-28">
-        <h2 id="cta-title" className="display text-[clamp(3.2rem,11vw,10rem)] font-extrabold leading-[0.88]">
+        <h2 id="cta-title" className="display text-[clamp(3.4rem,14vw,10rem)] font-extrabold leading-[0.88]">
           Less searching.
           <br />
           More doing.
