@@ -23,11 +23,11 @@ export function Wordmark({ className = "" }: Props) {
           <span
             className="absolute left-1/2 rounded-full bg-pin"
             style={{
-              width: "0.2em",
-              height: "0.2em",
-              top: "0.035em",
+              width: "0.17em",
+              height: "0.17em",
+              top: "0.05em",
               transform: "translateX(-50%)",
-              boxShadow: "0 0 0 0.042em var(--color-ink)",
+              boxShadow: "0 0 0 0.036em var(--color-ink)",
             }}
           />
         </span>
