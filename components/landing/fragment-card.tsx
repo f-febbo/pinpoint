@@ -1,3 +1,4 @@
+import { MiddleTruncate } from "./text";
 import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
 
 export type Fragment = {
@@ -7,6 +8,8 @@ export type Fragment = {
   detail?: string;
   tag?: string;
   urgent?: boolean;
+  /** Filename-like titles truncate in the middle. */
+  middle?: boolean;
 };
 
 /** A single scrap of information from some app: a tactile chip with a hard ink shadow. */
@@ -36,8 +39,12 @@ export function FragmentCard({
           </span>
         )}
       </div>
-      <p className="mt-1 truncate text-[0.8rem] font-semibold leading-snug sm:text-sm">{f.title}</p>
-      {f.detail && <p className="truncate text-[0.72rem] text-stone sm:text-[0.8rem]">{f.detail}</p>}
+      {f.middle ? (
+        <MiddleTruncate text={f.title} tail={10} className="mt-1 text-[0.8rem] font-semibold leading-snug sm:text-sm" />
+      ) : (
+        <p className="mt-1 line-clamp-1 text-[0.8rem] font-semibold leading-snug sm:line-clamp-2 sm:text-sm">{f.title}</p>
+      )}
+      {f.detail && <p className="line-clamp-1 text-[0.72rem] text-stone sm:text-[0.8rem]">{f.detail}</p>}
     </div>
   );
 }

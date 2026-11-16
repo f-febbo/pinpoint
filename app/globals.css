@@ -94,3 +94,70 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .packet { display: none; }
 }
+
+/* ---------- typography details ---------- */
+
+/* Auto hyphenation + balanced/pretty wrapping for running text */
+p, li, dd {
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  text-wrap: pretty;
+}
+h1, h2, h3, h4 {
+  hyphens: manual;
+  text-wrap: balance;
+}
+
+/* Fluid body copy */
+.fluid-body {
+  font-size: clamp(1.05rem, 0.96rem + 0.42vw, 1.3rem);
+}
+
+/* Trim the half-leading above and below display headings so spacing is optical */
+.trim {
+  text-box: trim-both cap alphabetic;
+}
+
+/* Underlines that sit clear of descenders and keep a steady weight */
+.ul {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+  text-decoration-skip-ink: auto;
+  text-decoration-color: var(--color-stone-light);
+  transition: text-decoration-color 0.2s;
+}
+.ul:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Acronyms in small caps so they sit quietly in running text */
+.acr {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.06em;
+  font-feature-settings: "smcp", "c2sc";
+}
+
+/* Superscripts: no extra line height, a hair of space before them */
+sup {
+  line-height: 0;
+  vertical-align: baseline;
+  position: relative;
+  top: -0.5em;
+  margin-inline-start: 0.18em;
+}
+
+/* Reserve the width of the bold state so toggling weight never shifts layout */
+.reserve {
+  display: inline-grid;
+  justify-items: center;
+}
+.reserve::after {
+  content: attr(data-text);
+  font-weight: 700;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}

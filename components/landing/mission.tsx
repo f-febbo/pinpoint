@@ -11,11 +11,11 @@ export function Mission() {
           </h2>
         </div>
         <div className="lg:col-span-9">
-          <p className="font-display text-[clamp(1.9rem,4.2vw,3.6rem)] font-semibold leading-[1.08] tracking-[-0.03em]">
+          <p className="trim font-display text-[clamp(1.9rem,4.2vw,3.6rem)] font-semibold leading-[1.08] tracking-[-0.03em]">
             We believe technology should make information easier to manage, not harder to find. pinpoint is being built
             to give people clarity across the tools they already use, without sacrificing control of their information.
           </p>
-          <div className="mt-12 grid gap-6 text-lg leading-relaxed text-ink-3 md:grid-cols-2">
+          <div className="fluid-body mt-12 grid gap-6 leading-relaxed text-ink-3 md:grid-cols-2">
             <p>
               Everyone has lost an afternoon to looking for something they knew they had. More apps haven&rsquo;t
               fixed that. They&rsquo;ve made it worse, one new inbox at a time.

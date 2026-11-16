@@ -3,13 +3,14 @@
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { AnimatePresence, motion, useInView } from "motion/react";
 import { useRef, useState, type ReactNode } from "react";
+import { Acr, MiddleTruncate, Reserve } from "./text";
 import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
 
 function FeatureText({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
-      <h3 className="display text-[clamp(2.6rem,5.6vw,5rem)] font-extrabold">{title}</h3>
-      <div className="mt-5 max-w-md space-y-4 text-lg leading-relaxed text-ink-3">{children}</div>
+      <h3 className="display trim text-[clamp(2.6rem,5.6vw,5rem)] font-extrabold">{title}</h3>
+      <div className="mt-5 fluid-body max-w-md space-y-4 leading-relaxed text-ink-3">{children}</div>
     </div>
   );
 }
@@ -62,7 +63,7 @@ function FindVisual() {
             <SourceGlyph kind={f.kind} className="size-5" />
           </span>
           <div className="min-w-0">
-            <p className="font-semibold">{f.title}</p>
+            {f.kind === "mail" ? <MiddleTruncate text={f.title} tail={9} className="font-semibold" /> : <p className="line-clamp-2 font-semibold">{f.title}</p>}
             <p className="text-sm text-stone">
               {sourceLabel[f.kind]}: {f.where}. {f.date}.
             </p>
@@ -90,7 +91,7 @@ function AheadVisual() {
           Lena in #ops, reply 31 of 38
         </p>
         <p className="mt-1.5 leading-relaxed">
-          Totally fine on the vendor side. One thing though, finance needs the signed PO{" "}
+          Totally fine on the vendor side. One thing though, finance needs the signed <Acr>PO</Acr>{" "}
           <span className="relative whitespace-nowrap">
             <motion.span
               aria-hidden
@@ -120,7 +121,7 @@ function AheadVisual() {
                   transition={{ type: "spring", stiffness: 260, damping: 16, delay: reduce ? 0 : 0.9 }}
                   className="mt-1.5 rounded-md border-[1.5px] border-ink bg-pin p-1 text-[0.65rem] font-semibold leading-tight shadow-[2px_2px_0_var(--color-ink)] sm:p-1.5 sm:text-xs"
                 >
-                  Signed PO due
+                  Signed <Acr>PO</Acr> due
                   <span className="mt-0.5 block font-normal">from #ops</span>
                 </motion.div>
               )}
@@ -136,7 +137,7 @@ function AheadVisual() {
 
 const trail: { date: string; kind: SourceKind; title: string; body: string }[] = [
   { date: "Sep 3", kind: "mail", title: "The question", body: "Alex asks whether offline mode is in scope for the first release. Nobody answers for a week." },
-  { date: "Sep 10", kind: "calendar", title: "The discussion", body: "Scope review. Twenty minutes on offline mode. Concern: it doubles QA time." },
+  { date: "Sep 10", kind: "calendar", title: "The discussion", body: "Scope review. Twenty minutes on offline mode. Concern: it doubles <Acr>QA</Acr> time." },
   { date: "Sep 12", kind: "doc", title: "The proposal", body: "Scope v2 moves offline mode to the second release, with a note on why." },
   { date: "Sep 18", kind: "chat", title: "The decision", body: "Priya in #product: “Agreed, offline ships in R2.” Three thumbs up. Done." },
 ];
@@ -163,7 +164,9 @@ function ContextVisual() {
               >
                 <SourceGlyph kind={t.kind} className="size-4" />
               </button>
-              <span className={`mt-2 text-xs sm:text-sm ${i === n ? "font-semibold" : "text-stone"}`}>{t.date}</span>
+              <span className={`mt-2 text-xs sm:text-sm ${i === n ? "font-semibold" : "text-stone"}`}>
+                <Reserve>{t.date}</Reserve>
+              </span>
             </li>
           ))}
         </ol>
@@ -195,7 +198,7 @@ function ContextVisual() {
 const modes = [
   { id: "device", label: "On this device", desc: "A model runs on your own computer. Your information never leaves it to be processed." },
   { id: "company", label: "On company servers", desc: "Your organization hosts the model inside its own environment, under its own rules." },
-  { id: "external", label: "External provider", desc: "Off unless your organization's policy explicitly allows it, and only for what it allows." },
+  { id: "external", label: "External provider", desc: "Off unless your organization’s policy explicitly allows it, and only for what it allows." },
 ] as const;
 
 function OwnVisual() {
@@ -322,7 +325,7 @@ export function Features() {
                 infrastructure your organization controls.
               </p>
               <p>
-                <a href="#privacy" className="font-semibold text-ink underline decoration-pin decoration-[3px] underline-offset-4 hover:decoration-ink">
+                <a href="#privacy" className="font-semibold text-ink ul">
                   How localized inference works
                 </a>
               </p>

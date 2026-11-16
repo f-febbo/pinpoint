@@ -4,12 +4,13 @@ import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { AskPanel, FollowupsPanel, HistoryPanel, SearchPanel, TodayPanel } from "./showcase-panels";
+import { Reserve } from "./text";
 import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
 import { Wordmark } from "./wordmark";
 
 const tabs = [
   { id: "search", label: "Search", blurb: "One search box for every connected app.", Panel: SearchPanel },
-  { id: "today", label: "Today", blurb: "A daily overview of what changed and what's coming.", Panel: TodayPanel },
+  { id: "today", label: "Today", blurb: "A daily overview of what changed and what’s coming.", Panel: TodayPanel },
   { id: "followups", label: "Follow-ups", blurb: "Promises and requests, pulled out of your threads.", Panel: FollowupsPanel },
   { id: "history", label: "History", blurb: "A searchable record of what happened, and where.", Panel: HistoryPanel },
   { id: "ask", label: "Ask", blurb: "Questions answered from your own information, with sources.", Panel: AskPanel },
@@ -47,10 +48,10 @@ export function Showcase() {
     <section id="product" aria-labelledby="product-title" className="border-t border-line bg-paper-2 py-20 sm:py-28">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <h2 id="product-title" className="display text-[clamp(2.5rem,6vw,5.2rem)] font-extrabold lg:col-span-8">
+          <h2 id="product-title" className="display trim text-[clamp(2.5rem,6vw,5.2rem)] font-extrabold lg:col-span-8">
             pinpoint isn&rsquo;t another app to check.
           </h2>
-          <p className="max-w-md text-lg leading-relaxed text-ink-3 lg:col-span-4 lg:pb-2">
+          <p className="fluid-body max-w-md leading-relaxed text-ink-3 lg:col-span-4 lg:pb-2">
             It&rsquo;s a way to make sense of the ones you already use. Here&rsquo;s a look at what that could feel
             like on a Monday morning.
           </p>
@@ -121,11 +122,11 @@ export function Showcase() {
                       type="button"
                       tabIndex={-1}
                       onClick={() => setActive(i)}
-                      className={`w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
+                      className={`flex w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors ${
                         active === i ? "bg-ink font-semibold text-paper" : "hover:bg-paper-2"
                       }`}
                     >
-                      {t.label === "Ask" ? "Ask pinpoint" : t.label}
+                      <Reserve>{t.label === "Ask" ? "Ask pinpoint" : t.label}</Reserve>
                     </button>
                   </li>
                 ))}

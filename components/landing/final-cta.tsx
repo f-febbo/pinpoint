@@ -26,13 +26,13 @@ export function FinalCta() {
   return (
     <section id="early-access" aria-labelledby="cta-title" className="border-y-[1.5px] border-ink bg-lime">
       <div className="mx-auto max-w-[1320px] px-5 py-20 sm:px-8 sm:py-28">
-        <h2 id="cta-title" className="display text-[clamp(3.4rem,14vw,10rem)] font-extrabold leading-[0.88]">
+        <h2 id="cta-title" className="display trim text-[clamp(3.4rem,14vw,10rem)] font-extrabold leading-[0.88]">
           Less searching.
           <br />
           More doing.
         </h2>
         <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-start">
-          <p className="max-w-md text-xl leading-relaxed lg:col-span-5 lg:pt-8">
+          <p className="fluid-body max-w-md leading-relaxed [hyphens:manual] lg:col-span-5 lg:pt-8">
             Your work is already connected. Your information should be too.
           </p>
           <form onSubmit={onSubmit} noValidate className="lg:col-span-6 lg:col-start-7" aria-describedby="cta-status">
@@ -107,7 +107,7 @@ export function Footer() {
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {footerLinks.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="text-ink-3 underline-offset-4 hover:text-ink hover:underline">
+                <a href={l.href} className="text-ink-3 ul hover:text-ink">
                   {l.label}
                 </a>
               </li>

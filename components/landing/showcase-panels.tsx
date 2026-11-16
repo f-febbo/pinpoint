@@ -32,7 +32,7 @@ function PanelTitle({ children, aside }: { children: ReactNode; aside?: ReactNod
 
 /* ---------- Search ---------- */
 
-const QUERY = "Find the conversation where we discussed next quarter's budget.";
+const QUERY = "Find the conversation where we discussed next quarter’s budget.";
 
 export function SearchPanel() {
   const reduce = useReducedMotion();
@@ -135,7 +135,7 @@ export function TodayPanel() {
     {
       time: "2:30",
       title: "Budget review",
-      note: "Moved from 1:00. Bring: Q1 Budget, draft 3 and Priya's thread from Oct 14.",
+      note: "Moved from 1:00. Bring: Q1 Budget, draft 3 and Priya’s thread from Oct 14.",
       hot: true,
     },
   ];
@@ -397,7 +397,7 @@ const qa = [
 
 function Cite({ n }: { n: number }) {
   return (
-    <sup className="ml-0.5 inline-grid size-[1.15rem] -translate-y-0.5 place-items-center rounded-full border border-ink bg-pin text-[0.62rem] font-bold not-italic">
+    <sup className="inline-grid size-[1.15rem] place-items-center rounded-full border border-ink bg-pin text-[0.62rem] font-bold not-italic">
       {n}
     </sup>
   );

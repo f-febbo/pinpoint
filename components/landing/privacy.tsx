@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Acr } from "./text";
 
 function Node({ children, tone = "plain", sub }: { children: ReactNode; tone?: "plain" | "pin" | "risk" | "off"; sub?: string }) {
   const tones = {
@@ -35,12 +36,12 @@ export function Privacy() {
     <section id="privacy" aria-labelledby="privacy-title" className="on-dark bg-ink py-20 text-paper sm:py-28">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         <div className="grid gap-8 lg:grid-cols-12">
-          <h2 id="privacy-title" className="display text-[clamp(2.7rem,6.6vw,6rem)] font-extrabold lg:col-span-8">
+          <h2 id="privacy-title" className="display trim text-[clamp(2.7rem,6.6vw,6rem)] font-extrabold lg:col-span-8">
             Your data. Your environment. Your control.
           </h2>
-          <div className="space-y-4 text-lg leading-relaxed text-paper/80 lg:col-span-4 lg:self-end">
+          <div className="fluid-body space-y-4 leading-relaxed text-paper/80 lg:col-span-4 lg:self-end">
             <p>
-              Most AI tools send what you ask, and the information behind it, to a model run by someone else.
+              Most <Acr>AI</Acr> tools send what you ask, and the information behind it, to a model run by someone else.
               pinpoint is being designed the other way around.
             </p>
             <p>
@@ -54,7 +55,7 @@ export function Privacy() {
         <div className="mt-16 grid gap-6 md:grid-cols-2 md:gap-8">
           <figure className="rounded-[20px] border-[1.5px] border-line-dark p-5 sm:p-8">
             <figcaption className="mb-6">
-              <p className="font-display text-2xl font-bold">A typical AI workflow</p>
+              <p className="font-display text-2xl font-bold">A typical <Acr>AI</Acr> workflow</p>
               <p className="mt-1 text-sm text-stone-light">Information leaves your environment to be processed.</p>
             </figcaption>
             <div className="rounded-xl border-[1.5px] border-dashed border-stone-light/60 p-3">
@@ -62,9 +63,9 @@ export function Privacy() {
               <Node sub="Mail, docs, chat, calendar">Your apps</Node>
             </div>
             <Link delay="0s" note="Leaves your environment" />
-            <Node tone="risk" sub="Content is copied to an outside service">Sent to an AI provider</Node>
+            <Node tone="risk" sub="Content is copied to an outside service">Sent to an <Acr>AI</Acr> provider</Node>
             <Link delay="0.8s" />
-            <Node tone="risk" sub="Retention and use set by the provider's terms">Processed by their model</Node>
+            <Node tone="risk" sub="Retention and use set by the provider’s terms">Processed by their model</Node>
             <Link delay="1.6s" />
             <Node tone="risk">Answer comes back</Node>
           </figure>
@@ -78,9 +79,9 @@ export function Privacy() {
               <p className="mb-2 text-xs text-lime">Your environment</p>
               <Node sub="Mail, docs, chat, calendar">Your apps</Node>
               <Link color="var(--color-lime)" delay="0s" />
-              <Node sub="Respects each app's access rules and your organization's policies">Permission check</Node>
+              <Node sub="Respects each app’s access rules and your organization’s policies">Permission check</Node>
               <Link color="var(--color-lime)" delay="0.8s" />
-              <Node tone="pin" sub="Model runs on your device or your company's servers">Local inference</Node>
+              <Node tone="pin" sub="Model runs on your device or your company’s servers">Local inference</Node>
               <Link color="var(--color-lime)" delay="1.6s" />
               <Node sub="With links back to every source">Answer</Node>
             </div>
@@ -94,7 +95,7 @@ export function Privacy() {
           {[
             {
               t: "Permissions come first",
-              d: "pinpoint should only see what you can already see. Integrations follow each app's access rules and your organization's policies.",
+              d: "pinpoint should only see what you can already see. Integrations follow each app’s access rules and your organization’s policies.",
             },
             {
               t: "You choose where it runs",
@@ -102,7 +103,7 @@ export function Privacy() {
             },
             {
               t: "Policy decides the exceptions",
-              d: "If an organization wants an outside model for some tasks, that's a decision it makes on purpose, not a default.",
+              d: "If an organization wants an outside model for some tasks, that’s a decision it makes on purpose, not a default.",
             },
           ].map((x) => (
             <div key={x.t}>

@@ -11,9 +11,9 @@ const fragments: Fragment[] = [
   { id: "invoice", kind: "finance", title: "Invoice #2291 is overdue", detail: "$4,800, Northwind Print", tag: "Overdue", urgent: true },
   { id: "vendor", kind: "mail", title: "Re: Q3 vendor renewal", detail: "Dana: can you confirm by Friday?", tag: "Reply by Fri", urgent: true },
   { id: "budget", kind: "calendar", title: "Budget review moved to 2:30", detail: "Room 4B, with Priya and Sam", tag: "Today", urgent: true },
-  { id: "deck", kind: "chat", title: "“Did anyone send Ortiz the deck?”", detail: "#launch, 4 days ago", tag: "Follow up" },
+  { id: "deck", kind: "chat", title: "“Did Ortiz get the deck?”", detail: "#launch, 4 days ago", tag: "Follow up" },
   { id: "redlines", kind: "mail", title: "Contract redlines attached", detail: "From legal, unread", tag: "Review" },
-  { id: "pricing", kind: "doc", title: "Pricing_v4_final_FINAL", detail: "Last opened 3 weeks ago", tag: "Found" },
+  { id: "pricing", kind: "doc", title: "Pricing_v4_final_FINAL", middle: true, detail: "Last opened 3 weeks ago", tag: "Found" },
   { id: "kickoff", kind: "notes", title: "Kickoff notes: owners TBD", detail: "Shared folder, no owner", tag: "Later" },
 ];
 
@@ -112,7 +112,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.7 }}
-            className="mt-8 max-w-[34rem] text-lg leading-relaxed text-ink-3 sm:text-xl"
+            className="fluid-body mt-8 max-w-[34rem] leading-relaxed text-ink-3"
           >
             Your work lives across dozens of apps. pinpoint brings it together, helps you find what matters, and keeps
             your information where it belongs.
@@ -131,7 +131,7 @@ export function Hero() {
             </a>
             <a
               href="#how-it-works"
-              className="rounded-full px-5 py-3.5 font-semibold underline decoration-line decoration-2 underline-offset-[6px] transition-colors hover:decoration-ink"
+              className="rounded-full px-5 py-3.5 font-semibold ul"
             >
               How it works
             </a>

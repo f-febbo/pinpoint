@@ -54,7 +54,7 @@ const items: Item[] = [
     kind: "calendar",
     title: "Call with Marisol, Oct 30",
     detail: "What did we agree on pricing?",
-    caption: "The conversation you can't quite remember.",
+    caption: "The conversation you can’t quite remember.",
     resolved: "Notes and decision linked",
     from: { x: 72, y: 76, r: -7 },
     to: { x: 50, y: 82.5 },
@@ -77,7 +77,7 @@ const items: Item[] = [
   },
 ];
 
-// scroll choreography (fractions of the section's scroll)
+// scroll choreography (fractions of the section’s scroll)
 const GATHER = [0.3, 0.72];
 
 function Piece({ item, i, p }: { item: Item; i: number; p: MotionValue<number> }) {
@@ -100,8 +100,8 @@ function Piece({ item, i, p }: { item: Item; i: number; p: MotionValue<number> }
           <SourceGlyph kind={item.kind} className="size-3.5 text-ink" />
           {sourceLabel[item.kind]}
         </div>
-        <p className="mt-1 truncate text-sm font-semibold sm:text-[0.95rem]">{item.title}</p>
-        <p className="hidden truncate text-xs text-stone sm:block sm:text-sm">{item.detail}</p>
+        <p className="mt-1 line-clamp-1 text-sm font-semibold sm:line-clamp-2 sm:text-[0.95rem]">{item.title}</p>
+        <p className="hidden line-clamp-1 text-xs text-stone sm:block sm:text-sm">{item.detail}</p>
         {item.resolved && (
           <motion.p
             style={{ opacity: tag }}
@@ -144,7 +144,7 @@ export function Problem() {
         <div className={`${reduce ? "" : "sticky top-0 h-svh"} overflow-hidden`}>
           <div className="mx-auto grid h-full max-w-[1320px] grid-rows-[auto_1fr] gap-4 px-5 pb-6 pt-20 sm:px-8 lg:grid-cols-12 lg:grid-rows-1 lg:items-center lg:gap-6 lg:pb-0 lg:pt-16">
             <div className="lg:col-span-5">
-              <h2 id="problem-title" className="display text-balance text-[clamp(2.3rem,4.6vw,4.2rem)] font-extrabold">
+              <h2 id="problem-title" className="display trim text-[clamp(2.3rem,4.6vw,4.2rem)] font-extrabold">
                 Your information is everywhere. Your attention shouldn&rsquo;t be.
               </h2>
               <ul className="mt-6 hidden max-w-md sm:block lg:mt-10">
