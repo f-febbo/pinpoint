@@ -288,7 +288,7 @@ export function HistoryPanel() {
     <div>
       <PanelTitle>Activity history</PanelTitle>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <label className="flex flex-1 items-center gap-2 rounded-xl border-[1.5px] border-ink bg-white px-3 py-2">
+        <label className="flex flex-1 items-center gap-2 rounded-xl border-[1.5px] border-ink bg-white px-3 py-2 focus-within:shadow-[0_0_0_2px_var(--color-ink)]">
           <span className="sr-only">Filter history</span>
           <svg viewBox="0 0 20 20" className="size-4 shrink-0" aria-hidden>
             <circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="2" />
@@ -298,7 +298,7 @@ export function HistoryPanel() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Try “pricing” or “budget”"
-            className="w-full bg-transparent text-sm outline-none placeholder:text-stone"
+            className="w-full bg-transparent text-sm outline-none placeholder:text-stone focus-visible:outline-none"
           />
         </label>
       </div>
@@ -366,8 +366,8 @@ const qa = [
     a: (
       <>
         Three things are waiting on you. Dana needs the vendor renewal confirmed by Friday <Cite n={1} />, Ortiz is
-        still waiting on the launch deck <Cite n={2} />, and you told Alex you&rsquo;d get back to him about the
-        contract timeline six days ago <Cite n={3} />.
+        still waiting on the launch deck <Cite n={2} />, and you told Alex you&rsquo;d follow up on the contract
+        timeline six days ago <Cite n={3} />.
       </>
     ),
     sources: [
