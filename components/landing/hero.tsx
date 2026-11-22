@@ -203,10 +203,10 @@ export function Hero({ photo }: { photo: string | null }) {
               }}
             />
           )}
-          <div className="-ml-[150px]">
+          <div className={photo ? "-ml-[150px]" : "ml-auto"}>
             <Flow />
           </div>
-          <div className="ml-6 flex flex-1 justify-center">
+          <div className={photo ? "ml-6 flex flex-1 justify-center" : "ml-10 mr-auto flex w-[440px] justify-center"}>
             <Feed />
           </div>
         </div>
@@ -222,7 +222,7 @@ export function Hero({ photo }: { photo: string | null }) {
               style={{ maskImage: "linear-gradient(180deg, #000 70%, transparent)" }}
             />
           )}
-          <div className="-mt-16 w-full">
+          <div className={photo ? "-mt-16 w-full" : "w-full"}>
             <Feed />
           </div>
         </div>
