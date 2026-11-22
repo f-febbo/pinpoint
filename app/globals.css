@@ -187,3 +187,18 @@ h1, h2, h3 {
 /* tactile press */
 .press { transition: transform 160ms var(--ease-out-strong); }
 .press:active { transform: scale(0.97); }
+
+/* logos arc out of the phone and fade as they reach Pinpoint */
+@keyframes flow-in {
+  0% { offset-distance: 0%; opacity: 0; transform: scale(1); }
+  14% { opacity: 1; }
+  70% { opacity: 0.9; transform: scale(0.8); }
+  100% { offset-distance: 100%; opacity: 0; transform: scale(0.3); }
+}
+.flow-logo {
+  offset-rotate: 0deg;
+  animation: flow-in 3.8s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-logo { display: none; }
+}
