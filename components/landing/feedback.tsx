@@ -221,18 +221,18 @@ export function Feedback() {
       <div className="relative mx-auto grid max-w-[1200px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <h2 id="feedback-title" className="display trim text-[clamp(2.6rem,5.4vw,4.6rem)]">
-            Help us build it right
+            Help Us Build It Right
           </h2>
           <p className="fluid-body mt-8 max-w-sm leading-relaxed text-muted">
-            Tell us which pinpoint you’d wear or use. It takes a minute.
+            Tell us which Pinpoint you’d wear or use. It takes a minute.
           </p>
         </div>
 
         <div className="lg:col-span-7">
           {status === "sent" ? (
             <div className="rounded-3xl border border-border bg-surface p-10" role="status">
-              <Mark className="size-10 text-orange" animate />
-              <p className="mt-6 text-3xl font-medium tracking-[-0.02em]">Thank you.</p>
+              <Mark className="size-10 text-orange" />
+              <p className="mt-6 text-3xl font-medium tracking-[-0.02em]">Thank You</p>
               <p className="mt-3 max-w-md text-muted">Your answers are in. If you left your email, we’ll be in touch before launch.</p>
               <button type="button" onClick={() => setStatus("idle")} className="mt-8 text-sm text-blue-soft underline underline-offset-4">
                 Send another response
@@ -255,7 +255,7 @@ export function Feedback() {
                 <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="rounded-full bg-orange px-8 py-4 font-medium text-bg transition-[background-color,transform] hover:bg-[#ffb680] active:translate-y-px disabled:opacity-60"
+                  className="press rounded-full bg-orange px-8 py-4 font-medium text-bg shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_1px_2px_rgba(0,0,0,0.3),0_8px_24px_-8px_rgba(255,164,102,0.6)] transition-colors hover:bg-[#ffb680] disabled:opacity-60"
                 >
                   {status === "sending" ? "Sending…" : "Send"}
                 </button>

@@ -24,19 +24,19 @@ export function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300 ${
-        scrolled || open ? "border-b border-white/8 bg-bg/70 backdrop-blur-xl" : "border-b border-transparent"
+        scrolled || open ? "border-b border-white/[0.08] bg-bg/70 backdrop-blur-xl" : "border-b border-transparent"
       }`}
     >
-      <nav aria-label="Main" className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-5 sm:px-8">
-        <a href="#top" className="flex items-center gap-2.5 text-[1.3rem]" aria-label="pinpoint home">
-          <Mark className="size-7" animate />
+      <nav aria-label="Main" className="flex h-[72px] items-center justify-between px-5 sm:px-8 lg:px-10">
+        <a href="#top" className="flex items-center gap-2.5 text-[1.3rem] text-white" aria-label="pinpoint home">
+          <Mark className="size-7" />
           <Wordmark />
         </a>
 
         <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
           {links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className="rounded-full px-4 py-2 text-[0.95rem] text-text/75 transition-colors hover:text-text">
+              <a href={l.href} className="rounded-full px-4 py-2 text-[0.95rem] text-white transition-opacity hover:opacity-70">
                 {l.label}
               </a>
             </li>
@@ -44,15 +44,12 @@ export function Nav() {
         </ul>
 
         <div className="flex items-center gap-2">
-          <a
-            href="#feedback"
-            className="rounded-full bg-text px-5 py-2.5 text-[0.95rem] font-medium text-bg transition-colors hover:bg-white"
-          >
-            Give feedback
+          <a href="#feedback" className="press text-[0.95rem] font-medium text-white transition-opacity hover:opacity-70">
+            Give Feedback
           </a>
           <button
             type="button"
-            className="grid size-10 place-items-center rounded-full md:hidden"
+            className="press grid size-10 place-items-center rounded-full text-white md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -65,10 +62,10 @@ export function Nav() {
         </div>
       </nav>
       {open && (
-        <ul id="mobile-menu" className="border-t border-white/8 px-5 pb-4 md:hidden">
+        <ul id="mobile-menu" className="border-t border-white/[0.08] px-5 pb-4 md:hidden">
           {links.map((l) => (
             <li key={l.href}>
-              <a href={l.href} onClick={() => setOpen(false)} className="block border-b border-white/8 py-4 text-lg">
+              <a href={l.href} onClick={() => setOpen(false)} className="block border-b border-white/[0.08] py-4 text-lg text-white">
                 {l.label}
               </a>
             </li>
