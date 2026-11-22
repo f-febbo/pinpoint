@@ -20,6 +20,23 @@
   --color-green: #4cd58a;
   --color-rose: #ff6f7d;
 
+  /* the app's own graphite theme, easy on the eyes */
+  --color-g-bg: #1c1c1f;
+  --color-g-side: #17171a;
+  --color-g-card: #232327;
+  --color-g-card-2: #2b2b30;
+  --color-g-text: #f2f2f4;
+  --color-g-muted: #a1a1aa;
+  --color-g-dim: #6e6e78;
+  --color-g-sky: #8ab4f8;
+  --color-g-peach: #f6b98a;
+  --color-g-mint: #86d4b0;
+  --color-g-rose: #f29a9a;
+  --color-g-lilac: #b9a7f5;
+
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+
   --font-sans: var(--font-switzer), ui-sans-serif, system-ui, sans-serif;
   --font-logo: var(--font-poppins), var(--font-switzer), sans-serif;
 }
@@ -131,17 +148,6 @@ h1, h2, h3 {
   }
 }
 
-/* the mark's bars breathe like a live waveform */
-@keyframes bar {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(0.72); }
-}
-.mark-bar {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: bar 1.6s ease-in-out infinite;
-}
-
 /* stacked layers: fade the covered one out, the arriving one in */
 [data-stack] > [data-stack-content] {
   opacity: min(var(--in, 1), calc(1 - var(--out, 0) * 1.15));
@@ -158,3 +164,26 @@ h1, h2, h3 {
   background: #000;
   opacity: calc(var(--out, 0) * 0.7);
 }
+
+/* app surfaces: alpha borders and layered shadows */
+.g-card {
+  background: var(--color-g-card);
+  border: 1px solid rgb(255 255 255 / 0.07);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -10px rgb(0 0 0 / 0.45);
+}
+
+/* data streams in the hero */
+@keyframes flow {
+  to { stroke-dashoffset: -40; }
+}
+.flow { animation: flow 1.1s linear infinite; }
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-right { animation: marquee-right 30s linear infinite; }
+
+/* tactile press */
+.press { transition: transform 160ms var(--ease-out-strong); }
+.press:active { transform: scale(0.97); }
