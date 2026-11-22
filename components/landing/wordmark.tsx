@@ -1,4 +1,4 @@
-/** The pinpoint wordmark: lowercase Ranade, medium weight, wide tracking. */
+/** The pinpoint wordmark: lowercase, medium weight, wide tracking. */
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
     <span

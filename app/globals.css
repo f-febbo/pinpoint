@@ -13,7 +13,7 @@
   --color-line: #d3dad3;
   --color-line-dark: #2b3732;
 
-  --font-sans: var(--font-ranade), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "neue-haas-grotesk-display", var(--font-switzer), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -45,9 +45,9 @@ body {
 
 /* Big, light, tightly tracked headlines */
 .headline {
-  font-weight: 300;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
 }
 /* The point at the end of a headline */
 .pt {
@@ -67,7 +67,7 @@ body {
 
 p, li, dd {
   hyphens: auto;
-  hyphenate-limit-chars: 7 3 3;
+  hyphenate-limit-chars: 12 5 5; /* only long words, never the brand name */
   text-wrap: pretty;
 }
 h1, h2, h3, h4 {
@@ -91,10 +91,10 @@ h1, h2, h3, h4 {
   text-decoration-color: currentColor;
 }
 
-/* Ranade has no true small caps, so acronyms are set slightly smaller and opened up */
+/* Switzer has no true small caps, so acronyms are set a touch smaller instead of synthesized */
 .acr {
-  font-size: 0.88em;
-  letter-spacing: 0.04em;
+  font-size: 0.86em;
+  letter-spacing: 0.03em;
 }
 
 sup {
