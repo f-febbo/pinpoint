@@ -29,9 +29,7 @@ function Pill({
       }`}
     >
       <input type={type} name={name} value={value} checked={checked} onChange={onChange} className="sr-only" />
-      <span className="reserve" data-text={children}>
-        {children}
-      </span>
+      {children}
     </label>
   );
 }
@@ -166,7 +164,11 @@ export function Feedback() {
   };
 
   return (
-    <section id="feedback" aria-labelledby="feedback-title" className="border-t border-line">
+    <section
+      id="feedback"
+      aria-labelledby="feedback-title"
+      className="relative z-10 rounded-t-[32px] bg-paper shadow-[0_-24px_60px_rgba(15,23,20,0.12)]"
+    >
       <div className="mx-auto grid max-w-[1280px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
@@ -223,8 +225,8 @@ export function Footer() {
         <nav aria-label="Footer">
           <ul className="flex flex-wrap gap-x-8 gap-y-3">
             {[
-              ["#features", "Features"],
-              ["#how-it-works", "How it works"],
+              ["#where", "Where to be"],
+              ["#find", "Find anything"],
               ["#privacy", "Privacy"],
               ["#feedback", "Give feedback"],
             ].map(([h, l]) => (
