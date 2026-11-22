@@ -1,337 +1,178 @@
-"use client";
+import type { ReactNode } from "react";
+import { BrandIcon, type Brand } from "./brands";
 
-import { useReducedMotion } from "@/lib/use-reduced-motion";
-import { AnimatePresence, motion, useInView } from "motion/react";
-import { useRef, useState, type ReactNode } from "react";
-import { Acr, MiddleTruncate, Reserve } from "./text";
-import { SourceGlyph, sourceLabel, type SourceKind } from "./source-glyph";
-
-function FeatureText({ title, children }: { title: string; children: ReactNode }) {
+function Card({ title, body, children, className = "" }: { title: string; body: string; children: ReactNode; className?: string }) {
   return (
-    <div>
-      <h3 className="display trim text-[clamp(2.6rem,5.6vw,5rem)] font-extrabold">{title}</h3>
-      <div className="mt-5 fluid-body max-w-md space-y-4 leading-relaxed text-ink-3">{children}</div>
-    </div>
+    <article className={`flex flex-col overflow-hidden rounded-[20px] border border-line bg-card ${className}`}>
+      <div className="flex-1 border-b border-line bg-[linear-gradient(180deg,var(--color-mist),var(--color-card))] p-5 sm:p-7">
+        {children}
+      </div>
+      <div className="p-6 sm:p-7">
+        <h3 className="headline trim text-[clamp(1.7rem,2.6vw,2.3rem)]">
+          {title}
+          <span className="pt">.</span>
+        </h3>
+        <p className="mt-4 max-w-[34ch] leading-relaxed text-moss">{body}</p>
+      </div>
+    </article>
   );
 }
 
-/* ---------- 1. Find anything ---------- */
+function Src({ brand }: { brand: Brand }) {
+  return <BrandIcon brand={brand} className="size-3.5 shrink-0 text-moss" />;
+}
 
-const finds: { q: string; kind: SourceKind; where: string; title: string; date: string }[] = [
-  { q: "that pricing doc Marisol sent", kind: "mail", where: "Attachment in an email thread", title: "Halden_pricing_rev2.pdf", date: "Nov 3" },
-  { q: "the invoice from the printer in March", kind: "finance", where: "Finance app, paid invoices", title: "Northwind Print, invoice #1874", date: "Mar 12" },
-  { q: "what Ortiz asked about the deck", kind: "chat", where: "#launch channel, in a reply", title: "“Can I get the deck before the board call?”", date: "Nov 12" },
-  { q: "notes from the offsite", kind: "notes", where: "Personal notes, untitled", title: "Untitled note, 14 bullet points", date: "Sep 26" },
-];
-
-function FindVisual() {
-  const reduce = useReducedMotion();
-  const [i, setI] = useState(0);
-  const f = finds[i];
+/* where to be: a day rail across calendars */
+function WhereToBe() {
+  const rows: { time: string; title: string; brand: Brand; note?: string; state?: "now" | "leave" | "clash" }[] = [
+    { time: "1:00", title: "Design review", brand: "outlook", note: "Now, ends in 25 min", state: "now" },
+    { time: "2:30", title: "Budget review, Hudson 204", brand: "googleCalendar", note: "Leave by 2:18, 12 min walk", state: "leave" },
+    { time: "3:15", title: "1:1 with Dana", brand: "teams", note: "Overlaps your dentist appointment", state: "clash" },
+  ];
   return (
-    <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
-      <p className="text-sm text-stone">Pick something half-remembered</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {finds.map((x, n) => (
-          <button
-            key={x.q}
-            type="button"
-            aria-pressed={i === n}
-            onClick={() => setI(n)}
-            className={`rounded-full border-[1.5px] px-3 py-1.5 text-sm transition-colors ${
-              i === n ? "border-ink bg-pin font-semibold" : "border-ink/25 hover:border-ink"
+    <ol className="relative space-y-5 pl-6">
+      <span aria-hidden className="absolute bottom-2 left-[5px] top-2 w-px bg-sage" />
+      {rows.map((r) => (
+        <li key={r.time} className="relative">
+          <span
+            aria-hidden
+            className={`absolute -left-6 top-1.5 size-[11px] rounded-full border ${
+              r.state === "now" ? "border-copper bg-copper" : "border-sage bg-card"
             }`}
-          >
-            {x.q}
-          </button>
-        ))}
-      </div>
-      <div className="mt-6 rounded-xl border-[1.5px] border-ink bg-white px-4 py-3 font-display text-xl font-semibold tracking-tight sm:text-2xl">
-        {f.q}
-      </div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={i}
-          initial={reduce ? false : { opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="mt-3 flex items-start gap-3 rounded-xl bg-paper-2 p-4"
-          aria-live="polite"
-        >
-          <span className="grid size-9 shrink-0 place-items-center rounded-lg border-[1.5px] border-ink bg-white">
-            <SourceGlyph kind={f.kind} className="size-5" />
-          </span>
-          <div className="min-w-0">
-            {f.kind === "mail" ? <MiddleTruncate text={f.title} tail={9} className="font-semibold" /> : <p className="line-clamp-2 font-semibold">{f.title}</p>}
-            <p className="text-sm text-stone">
-              {sourceLabel[f.kind]}: {f.where}. {f.date}.
-            </p>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-}
-
-/* ---------- 2. Stay ahead ---------- */
-
-function AheadVisual() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduce = useReducedMotion();
-  const on = inView || !!reduce;
-  const days = ["Mon 17", "Tue 18", "Wed 19", "Thu 20", "Fri 21"];
-
-  return (
-    <div ref={ref} className="space-y-5">
-      <div className="max-w-md rounded-2xl rounded-bl-md border-[1.5px] border-ink bg-card p-4">
-        <p className="flex items-center gap-1.5 text-xs text-stone">
-          <SourceGlyph kind="chat" className="size-3.5 text-ink" />
-          Lena in #ops, reply 31 of 38
-        </p>
-        <p className="mt-1.5 leading-relaxed">
-          Totally fine on the vendor side. One thing though, finance needs the signed <Acr>PO</Acr>{" "}
-          <span className="relative whitespace-nowrap">
-            <motion.span
-              aria-hidden
-              className="absolute inset-x-[-2px] inset-y-[1px] origin-left rounded-[3px] bg-lime"
-              initial={false}
-              animate={{ scaleX: on ? 1 : 0 }}
-              transition={{ duration: 0.6, delay: reduce ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-            />
-            <span className="relative font-semibold">by the 21st</span>
-          </span>{" "}
-          or it slips to next month. Anyway, did everyone see the new office plants?
-        </p>
-      </div>
-
-      <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-4 shadow-[5px_5px_0_var(--color-ink)] sm:p-5">
-        <p className="mb-3 font-semibold">This week</p>
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
-          {days.map((d, n) => (
-            <div key={d} className="min-h-[124px] rounded-lg border border-line bg-white/70 p-1.5 sm:p-2">
-              <p className="text-[0.7rem] font-semibold text-stone sm:text-xs">{d}</p>
-              {n === 1 && <p className="mt-1.5 rounded bg-paper-2 px-1 py-0.5 text-[0.65rem] sm:text-xs">Standup</p>}
-              {n === 3 && <p className="mt-1.5 rounded bg-paper-2 px-1 py-0.5 text-[0.65rem] sm:text-xs">1:1 Dana</p>}
-              {n === 4 && (
-                <motion.div
-                  initial={false}
-                  animate={on ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -24, scale: 0.9 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 16, delay: reduce ? 0 : 0.9 }}
-                  className="mt-1.5 rounded-md border-[1.5px] border-ink bg-pin p-1 text-[0.65rem] font-semibold leading-tight shadow-[2px_2px_0_var(--color-ink)] sm:p-1.5 sm:text-xs"
-                >
-                  Signed <Acr>PO</Acr> due
-                  <span className="mt-0.5 block font-normal">from #ops</span>
-                </motion.div>
+          />
+          <div className="flex items-baseline gap-3">
+            <span className="w-10 shrink-0 text-sm tabular-nums text-moss">{r.time}</span>
+            <div className="min-w-0">
+              <p className="flex items-center gap-2 font-medium">
+                <Src brand={r.brand} />
+                <span className="line-clamp-1">{r.title}</span>
+              </p>
+              {r.note && (
+                <p className={`mt-0.5 text-sm ${r.state === "now" ? "text-copper" : r.state === "clash" ? "text-ink" : "text-moss"}`}>
+                  {r.state === "clash" && <span className="mr-1.5 inline-block size-1.5 -translate-y-px rounded-full bg-copper align-middle" />}
+                  {r.note}
+                </p>
               )}
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 
-/* ---------- 3. Keep your context ---------- */
-
-const trail: { date: string; kind: SourceKind; title: string; body: string }[] = [
-  { date: "Sep 3", kind: "mail", title: "The question", body: "Alex asks whether offline mode is in scope for the first release. Nobody answers for a week." },
-  { date: "Sep 10", kind: "calendar", title: "The discussion", body: "Scope review. Twenty minutes on offline mode. Concern: it doubles <Acr>QA</Acr> time." },
-  { date: "Sep 12", kind: "doc", title: "The proposal", body: "Scope v2 moves offline mode to the second release, with a note on why." },
-  { date: "Sep 18", kind: "chat", title: "The decision", body: "Priya in #product: “Agreed, offline ships in R2.” Three thumbs up. Done." },
-];
-
-function ContextVisual() {
-  const [i, setI] = useState(3);
-  const reduce = useReducedMotion();
+/* find anything: one query, results from anywhere */
+function FindAnything() {
+  const results: { brand: Brand; title: string; meta: string }[] = [
+    { brand: "slack", title: "#finance thread with Priya and Sam", meta: "Oct 14" },
+    { brand: "googleDrive", title: "Q1 budget, draft 3", meta: "Oct 15" },
+    { brand: "gmail", title: "Re: Q1 numbers", meta: "Oct 13" },
+  ];
   return (
-    <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
-      <p className="text-sm text-stone">Why did offline mode move to the second release?</p>
-      <div className="relative mt-6">
-        <div aria-hidden className="absolute left-0 right-0 top-[18px] h-[1.5px] bg-ink" />
-        <ol className="relative grid grid-cols-4">
-          {trail.map((t, n) => (
-            <li key={t.date} className="flex flex-col items-center">
-              <button
-                type="button"
-                onClick={() => setI(n)}
-                aria-pressed={i === n}
-                aria-label={`${t.date}: ${t.title}`}
-                className={`grid size-9 place-items-center rounded-full border-[1.5px] border-ink transition-[background-color,transform] hover:scale-110 ${
-                  i === n ? "bg-pin" : "bg-white"
-                }`}
-              >
-                <SourceGlyph kind={t.kind} className="size-4" />
-              </button>
-              <span className={`mt-2 text-xs sm:text-sm ${i === n ? "font-semibold" : "text-stone"}`}>
-                <Reserve>{t.date}</Reserve>
-              </span>
-            </li>
-          ))}
-        </ol>
+    <div>
+      <div className="flex items-center gap-3 rounded-full border border-line bg-card px-4 py-2.5 text-sm">
+        <svg viewBox="0 0 20 20" className="size-4 text-moss" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
+          <circle cx="8.5" cy="8.5" r="5.5" />
+          <path d="M13 13l4 4" strokeLinecap="round" />
+        </svg>
+        where did we land on the q1 budget?
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={i}
-          initial={reduce ? false : { opacity: 0, x: 8 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="mt-6 min-h-[104px] border-t border-line pt-4"
-          aria-live="polite"
-        >
-          <p className="flex items-center gap-2 text-sm text-stone">
-            <SourceGlyph kind={trail[i].kind} className="size-4 text-ink" />
-            {sourceLabel[trail[i].kind]}, {trail[i].date}
-          </p>
-          <p className="mt-1 font-display text-xl font-bold">{trail[i].title}</p>
-          <p className="mt-1 text-ink-3">{trail[i].body}</p>
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-}
-
-/* ---------- 4. Intelligence that stays yours ---------- */
-
-const modes = [
-  { id: "device", label: "On this device", desc: "A model runs on your own computer. Your information never leaves it to be processed." },
-  { id: "company", label: "On company servers", desc: "Your organization hosts the model inside its own environment, under its own rules." },
-  { id: "external", label: "External provider", desc: "Off unless your organization’s policy explicitly allows it, and only for what it allows." },
-] as const;
-
-function OwnVisual() {
-  const [m, setM] = useState<(typeof modes)[number]["id"]>("device");
-  const reduce = useReducedMotion();
-  const idx = modes.findIndex((x) => x.id === m);
-  // where the "processing" marker sits in the diagram (% from left)
-  const markerX = [17, 50, 84][idx];
-
-  return (
-    <div className="rounded-[18px] border-[1.5px] border-ink bg-card p-5 shadow-[5px_5px_0_var(--color-ink)] sm:p-7">
-      <fieldset>
-        <legend className="text-sm text-stone">Where should AI processing happen?</legend>
-        <div className="mt-3 grid grid-cols-3 gap-1 rounded-xl border-[1.5px] border-ink bg-paper-2 p-1">
-          {modes.map((x) => (
-            <label
-              key={x.id}
-              className={`relative cursor-pointer rounded-lg px-2 py-2 text-center text-xs font-semibold transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ink sm:text-sm ${
-                m === x.id ? "text-ink" : "text-stone hover:text-ink"
-              }`}
-            >
-              <input type="radio" name="proc" value={x.id} checked={m === x.id} onChange={() => setM(x.id)} className="sr-only" />
-              {m === x.id && (
-                <motion.span
-                  layoutId="proc-pill"
-                  transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 32 }}
-                  className={`absolute inset-0 rounded-lg border-[1.5px] border-ink ${x.id === "external" ? "bg-white" : "bg-pin"}`}
-                />
-              )}
-              <span className="relative">{x.label}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <div className="relative mt-6 h-[150px]" aria-hidden>
-        {/* environment boundary covers device + company */}
-        <div className="absolute inset-y-0 left-0 w-[67%] rounded-xl border-[1.5px] border-dashed border-ink" />
-        <span className="absolute -top-2.5 left-3 bg-card px-1.5 text-xs font-semibold">Your environment</span>
-        <div className="absolute inset-y-6 right-0 w-[30%] rounded-xl border-[1.5px] border-line bg-paper-2" />
-        {[
-          { x: 17, t: "Laptop" },
-          { x: 50, t: "Company server" },
-          { x: 84, t: "Third party" },
-        ].map((n) => (
-          <span key={n.t} className="absolute bottom-3 -translate-x-1/2 whitespace-nowrap text-xs text-stone" style={{ left: `${n.x}%` }}>
-            {n.t}
-          </span>
+      <ul className="mt-3 divide-y divide-line">
+        {results.map((r, i) => (
+          <li key={r.title} className="flex items-center gap-3 py-2.5 text-sm">
+            <Src brand={r.brand} />
+            <span className={`line-clamp-1 flex-1 ${i === 0 ? "font-medium" : "text-moss"}`}>{r.title}</span>
+            <span className="shrink-0 tabular-nums text-moss">{r.meta}</span>
+          </li>
         ))}
-        <motion.div
-          className={`absolute top-[46px] grid size-12 -translate-x-1/2 place-items-center rounded-full border-[1.5px] border-ink ${
-            m === "external" ? "border-dashed bg-white" : "bg-pin shadow-[3px_3px_0_var(--color-ink)]"
-          }`}
-          initial={false}
-          animate={{ left: `${markerX}%` }}
-          transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 220, damping: 22 }}
-        >
-          <span className={`size-3 rounded-full ${m === "external" ? "border-[1.5px] border-ink" : "bg-ink"}`} />
-        </motion.div>
-      </div>
-      <p className="mt-4 min-h-[3em] text-ink-3" aria-live="polite">
-        {modes[idx].desc}
-      </p>
+      </ul>
     </div>
   );
 }
 
-/* ---------- section ---------- */
+/* follow-ups: what you owe, what you're owed */
+function FollowUps() {
+  const rows: { brand: Brand; text: string; age: string; mine: boolean }[] = [
+    { brand: "gmail", text: "Reply to Dana about the vendor renewal", age: "2 days", mine: true },
+    { brand: "slack", text: "Send Ortiz the launch deck", age: "4 days", mine: true },
+    { brand: "teams", text: "Marisol owes you revised pricing", age: "Waiting", mine: false },
+  ];
+  return (
+    <ul className="space-y-2">
+      {rows.map((r) => (
+        <li key={r.text} className="flex items-center gap-3 rounded-xl border border-line bg-card px-3.5 py-3 text-sm">
+          <span aria-hidden className={`size-4 shrink-0 rounded-full border ${r.mine ? "border-ink" : "border-dashed border-sage"}`} />
+          <span className="line-clamp-1 flex-1">{r.text}</span>
+          <Src brand={r.brand} />
+          <span className={`w-14 shrink-0 text-right tabular-nums ${r.mine ? "text-copper" : "text-moss"}`}>{r.age}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* walk in prepared: the meeting brief */
+function Prepared() {
+  const items: { brand: Brand; text: string }[] = [
+    { brand: "googleDrive", text: "Q1 budget, draft 3" },
+    { brand: "slack", text: "Last thread with Priya" },
+    { brand: "gmail", text: "Sam’s open question on tooling" },
+  ];
+  return (
+    <div className="rounded-2xl border border-line bg-card p-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="flex items-center gap-2 font-medium">
+          <Src brand="googleMeet" />
+          Budget review
+        </p>
+        <span className="text-sm text-copper">in 25 min</span>
+      </div>
+      <p className="mt-3 text-sm text-moss">Last decision: keep headcount flat, move $40k to tooling.</p>
+      <ul className="mt-3 flex flex-wrap gap-2">
+        {items.map((i) => (
+          <li key={i.text} className="flex items-center gap-2 rounded-full bg-mist px-3 py-1.5 text-sm">
+            <Src brand={i.brand} />
+            {i.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function Features() {
   return (
-    <section id="how-it-works" aria-label="How pinpoint works" className="border-t border-line">
-      <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-        <div className="grid gap-10 py-20 sm:py-28 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="lg:col-span-5">
-            <FeatureText title="Find anything.">
-              <p>
-                Search everything you&rsquo;ve connected at once. You don&rsquo;t need to remember which app it was in,
-                who sent it, or the exact words. Describe it the way you&rsquo;d describe it to a colleague.
-              </p>
-            </FeatureText>
-          </div>
-          <div className="lg:col-span-6 lg:col-start-7">
-            <FindVisual />
-          </div>
-        </div>
+    <section id="features" aria-labelledby="features-title" className="mx-auto max-w-[1280px] px-5 py-24 sm:px-8 sm:py-32">
+      <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+        <h2 id="features-title" className="headline trim text-[clamp(2.6rem,6vw,5rem)] lg:col-span-7">
+          what pinpoint does<span className="pt">.</span>
+        </h2>
+        <p className="fluid-body max-w-md leading-relaxed text-moss lg:col-span-5">
+          Not another app to check. A single view of the ones you already use.
+        </p>
+      </div>
 
-        <div className="grid gap-10 border-t border-line py-20 sm:py-28 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="order-2 lg:order-1 lg:col-span-6">
-            <AheadVisual />
-          </div>
-          <div className="order-1 lg:order-2 lg:col-span-5 lg:col-start-8">
-            <FeatureText title="Stay ahead.">
-              <p>
-                Deadlines hide in reply 31 of a long thread. Promises get made in passing. pinpoint brings dates,
-                requests and the things you said you&rsquo;d do up to the surface, before they become late.
-              </p>
-            </FeatureText>
-          </div>
-        </div>
-
-        <div className="grid gap-10 border-t border-line py-20 sm:py-28 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="lg:col-span-5">
-            <FeatureText title="Keep your context.">
-              <p>
-                Decisions rarely happen in one place. They start in an email, get argued in a meeting and end in a
-                chat. pinpoint keeps the trail together, so you can see how you got here.
-              </p>
-            </FeatureText>
-          </div>
-          <div className="lg:col-span-6 lg:col-start-7">
-            <ContextVisual />
-          </div>
-        </div>
-
-        <div className="grid gap-10 border-t border-line py-20 sm:py-28 lg:grid-cols-12 lg:items-center lg:gap-8">
-          <div className="order-2 lg:order-1 lg:col-span-6">
-            <OwnVisual />
-          </div>
-          <div className="order-1 lg:order-2 lg:col-span-5 lg:col-start-8">
-            <FeatureText title="Intelligence that stays yours.">
-              <p>
-                pinpoint is being designed to run its AI where your information already lives: on your device, or on
-                infrastructure your organization controls.
-              </p>
-              <p>
-                <a href="#privacy" className="font-semibold text-ink ul">
-                  How localized inference works
-                </a>
-              </p>
-            </FeatureText>
-          </div>
-        </div>
+      <div className="mt-14 grid gap-4 lg:grid-cols-12">
+        <Card
+          className="lg:col-span-7"
+          title="always know where to be"
+          body="Every calendar on one timeline, with when to leave and a heads-up when two plans collide."
+        >
+          <WhereToBe />
+        </Card>
+        <Card className="lg:col-span-5" title="find anything" body="Ask the way you’d ask a colleague. pinpoint searches every app at once.">
+          <FindAnything />
+        </Card>
+        <Card className="lg:col-span-5" title="never drop a follow-up" body="Promises you made and replies you owe, pulled out of your threads.">
+          <FollowUps />
+        </Card>
+        <Card
+          className="lg:col-span-7"
+          title="walk in prepared"
+          body="Before each meeting, the doc, the thread and the last decision, in one place."
+        >
+          <Prepared />
+        </Card>
       </div>
     </section>
   );
