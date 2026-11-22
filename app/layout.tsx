@@ -1,32 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  axes: ["opsz", "wdth"],
-});
-
-const instrument = Instrument_Sans({
-  variable: "--font-instrument",
-  subsets: ["latin"],
-  axes: ["wdth"],
+// Ranade by Indian Type Foundry, via Fontshare (ITF Free Font License)
+const ranade = localFont({
+  src: "./fonts/Ranade-Variable.woff2",
+  variable: "--font-ranade",
+  weight: "100 700",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "pinpoint: everything you need, in one place",
   description:
-    "Your work lives across dozens of apps. pinpoint brings it together, helps you find what matters, and keeps your information where it belongs.",
+    "pinpoint connects your calendars, inbox and chats so you always know where to be, what you promised, and where everything is.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f6ef",
+  themeColor: "#f1f2ee",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${instrument.variable} antialiased`}>
+    <html lang="en" className={`${ranade.variable} antialiased`}>
       <body className="min-h-full">{children}</body>
     </html>
   );
