@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Mark } from "./mark";
 import { Wordmark } from "./wordmark";
 
 const links = [
-  { href: "#where", label: "Where to be" },
-  { href: "#find", label: "Find anything" },
+  { href: "#where", label: "Schedule" },
+  { href: "#ask", label: "Ask" },
   { href: "#privacy", label: "Privacy" },
 ];
 
@@ -20,69 +21,59 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
-      <nav
-        aria-label="Main"
-        className="mx-auto flex max-w-[1280px] items-center justify-between"
-      >
-        <a
-          href="#top"
-          aria-label="pinpoint home"
-          className={`rounded-full px-5 py-3 text-[1.05rem] transition-[background-color,box-shadow] duration-300 ${
-            scrolled || open ? "bg-card/95 shadow-[0_0_0_1px_var(--color-line)] backdrop-blur-md" : ""
-          }`}
-        >
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300 ${
+        scrolled || open ? "border-b border-white/8 bg-bg/70 backdrop-blur-xl" : "border-b border-transparent"
+      }`}
+    >
+      <nav aria-label="Main" className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-5 sm:px-8">
+        <a href="#top" className="flex items-center gap-2.5 text-[1.3rem]" aria-label="pinpoint home">
+          <Mark className="size-7" animate />
           <Wordmark />
         </a>
 
-        <div className="flex items-center gap-1 rounded-full bg-card/95 p-1 shadow-[0_0_0_1px_var(--color-line)] backdrop-blur-md">
-          <ul className="hidden items-center md:flex">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className="label block rounded-full px-4 py-2.5 text-moss transition-colors hover:bg-mist hover:text-ink">
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a href="#feedback" className="label rounded-full bg-ink px-4 py-2.5 text-paper transition-colors hover:bg-moss">
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
+          {links.map((l) => (
+            <li key={l.href}>
+              <a href={l.href} className="rounded-full px-4 py-2 text-[0.95rem] text-text/75 transition-colors hover:text-text">
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center gap-2">
+          <a
+            href="#feedback"
+            className="rounded-full bg-text px-5 py-2.5 text-[0.95rem] font-medium text-bg transition-colors hover:bg-white"
+          >
             Give feedback
           </a>
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-full md:hidden"
+            className="grid size-10 place-items-center rounded-full md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((o) => !o)}
           >
-            <svg viewBox="0 0 20 20" className="size-4" aria-hidden stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+            <svg viewBox="0 0 20 20" className="size-5" aria-hidden stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
               {open ? <path d="M5 5l10 10M15 5L5 15" /> : <path d="M3 7h14M3 13h14" />}
             </svg>
           </button>
         </div>
       </nav>
-
       {open && (
-        <div id="mobile-menu" className="mx-auto mt-2 max-w-[1280px] rounded-3xl bg-card p-2 shadow-[0_0_0_1px_var(--color-line)] md:hidden">
-          <ul>
-            {links.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3.5 text-lg font-light hover:bg-mist">
-                  {l.label.toLowerCase()}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul id="mobile-menu" className="border-t border-white/8 px-5 pb-4 md:hidden">
+          {links.map((l) => (
+            <li key={l.href}>
+              <a href={l.href} onClick={() => setOpen(false)} className="block border-b border-white/8 py-4 text-lg">
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       )}
     </header>
   );
