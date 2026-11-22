@@ -74,14 +74,17 @@ body {
   line-height: 0.98;
 }
 
-p, li, dd {
-  hyphens: auto;
-  hyphenate-limit-chars: 12 5 5;
-  text-wrap: pretty;
-}
-h1, h2, h3 {
-  hyphens: manual;
-  text-wrap: balance;
+/* in the base layer so utilities like truncate can override them */
+@layer base {
+  p, li, dd {
+    hyphens: auto;
+    hyphenate-limit-chars: 12 5 5;
+    text-wrap: pretty;
+  }
+  h1, h2, h3 {
+    hyphens: manual;
+    text-wrap: balance;
+  }
 }
 
 .fluid-body {
