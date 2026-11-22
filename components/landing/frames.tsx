@@ -24,7 +24,7 @@ const frames: { id: string; title: string; body: string; View: ComponentType<{ g
   {
     id: "privacy",
     title: "Private by Design",
-    body: "Recordings stay on your phone. You choose when Pinpoint thinks, and which approved model it uses.",
+    body: "Recordings stay on your phone, and you choose when Pinpoint thinks and which approved model it uses.",
     View: SettingsView,
     glow: "radial-gradient(70% 60% at 50% 100%, rgba(46,107,255,0.5), transparent 70%), linear-gradient(180deg, #05060d, #070b1f)",
   },
@@ -89,7 +89,7 @@ export function Frames() {
               <h2 id={`${id}-title`} className="display trim text-[clamp(2.2rem,3.8vw,3.6rem)]">
                 {title}
               </h2>
-              <p className="fluid-body max-w-[30rem] leading-relaxed text-muted lg:text-right">{body}</p>
+              <p className="fluid-body max-w-[30rem] leading-relaxed text-white lg:text-right">{body}</p>
             </div>
             <ScaleFit width={1440} reserveHeight={235} className="lg:flex-1">
               <View />

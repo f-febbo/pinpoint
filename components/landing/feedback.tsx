@@ -223,8 +223,8 @@ export function Feedback() {
           <h2 id="feedback-title" className="display trim text-[clamp(2.6rem,5.4vw,4.6rem)]">
             Help Us Build It Right
           </h2>
-          <p className="fluid-body mt-8 max-w-sm leading-relaxed text-muted">
-            Tell us which Pinpoint you’d wear or use. It takes a minute.
+          <p className="fluid-body mt-8 max-w-sm leading-relaxed text-white">
+            Take a minute to tell us which Pinpoint you’d actually use.
           </p>
         </div>
 
@@ -233,7 +233,7 @@ export function Feedback() {
             <div className="rounded-3xl border border-border bg-surface p-10" role="status">
               <Mark className="size-10 text-orange" />
               <p className="mt-6 text-3xl font-medium tracking-[-0.02em]">Thank You</p>
-              <p className="mt-3 max-w-md text-muted">Your answers are in. If you left your email, we’ll be in touch before launch.</p>
+              <p className="mt-3 max-w-md text-white">Your answers are in, and we’ll be in touch before launch if you left your email.</p>
               <button type="button" onClick={() => setStatus("idle")} className="mt-8 text-sm text-blue-soft underline underline-offset-4">
                 Send another response
               </button>
