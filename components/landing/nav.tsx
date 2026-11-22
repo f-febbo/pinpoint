@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { Wordmark } from "./wordmark";
 
 const links = [
-  { href: "#features", label: "Features" },
-  { href: "#how-it-works", label: "How it works" },
+  { href: "#where", label: "Where to be" },
+  { href: "#find", label: "Find anything" },
   { href: "#privacy", label: "Privacy" },
 ];
 
@@ -37,13 +37,13 @@ export function Nav() {
           href="#top"
           aria-label="pinpoint home"
           className={`rounded-full px-5 py-3 text-[1.05rem] transition-[background-color,box-shadow] duration-300 ${
-            scrolled || open ? "bg-card/70 shadow-[0_0_0_1px_var(--color-line)] backdrop-blur-md" : ""
+            scrolled || open ? "bg-card/95 shadow-[0_0_0_1px_var(--color-line)] backdrop-blur-md" : ""
           }`}
         >
           <Wordmark />
         </a>
 
-        <div className="flex items-center gap-1 rounded-full bg-card/70 p-1 shadow-[0_0_0_1px_var(--color-line)] backdrop-blur-md">
+        <div className="flex items-center gap-1 rounded-full bg-card/95 p-1 shadow-[0_0_0_1px_var(--color-line)] backdrop-blur-md">
           <ul className="hidden items-center md:flex">
             {links.map((l) => (
               <li key={l.href}>

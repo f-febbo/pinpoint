@@ -3,7 +3,7 @@ import { HeroArt } from "./hero-art";
 
 export function Hero() {
   return (
-    <section id="top" className="relative flex min-h-[100svh] flex-col overflow-hidden">
+    <section id="top" className="relative flex min-h-[100svh] flex-col overflow-hidden lg:sticky lg:top-0 lg:h-svh">
       <HeroArt />
       {/* keep the copy side calm */}
       <div
@@ -27,27 +27,26 @@ export function Hero() {
             Give feedback
           </a>
           <a
-            href="#how-it-works"
+            href="#where"
             className="label rounded-full px-6 py-4 shadow-[inset_0_0_0_1px_var(--color-sage)] transition-colors hover:bg-card"
           >
-            How it works ↗
+            See how it works ↗
           </a>
         </div>
       </div>
 
-      <div className="relative mx-auto mt-16 w-full max-w-[1280px] px-5 pb-8 sm:px-8">
-        <p className="label mb-4 text-moss">Connects with</p>
-        <ul className="grid grid-cols-4 border-t border-line/80 lg:grid-cols-8">
-          {integrations.map((b) => (
-            <li
-              key={b}
-              className="flex flex-col items-start gap-2 border-b border-line/80 py-4 pr-4 text-ink/75 sm:flex-row sm:items-center sm:gap-2.5"
-            >
-              <BrandIcon brand={b} className="size-5 shrink-0" />
-              <span className="text-[0.8rem] leading-tight sm:whitespace-nowrap sm:text-sm">{brandName[b]}</span>
-            </li>
-          ))}
-        </ul>
+      <div className="relative mx-auto mt-16 w-full max-w-[1280px] px-5 pb-10 sm:px-8">
+        <div className="flex flex-col gap-5 border-t border-line/80 pt-6 sm:flex-row sm:items-center sm:gap-10">
+          <p className="label shrink-0 text-moss">Connects with</p>
+          <ul className="flex flex-1 items-center justify-between gap-3 text-ink/70 sm:gap-6">
+            {integrations.map((b) => (
+              <li key={b} title={brandName[b]}>
+                <BrandIcon brand={b} className="size-5 transition-colors hover:text-ink sm:size-6" />
+                <span className="sr-only">{brandName[b]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
