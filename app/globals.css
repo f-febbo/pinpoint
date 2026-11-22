@@ -1,145 +1,126 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f1f2ee;
-  --color-mist: #e3e8e2;
-  --color-card: #f8f9f6;
-  --color-ink: #0f1714;
-  --color-ink-2: #1a2420;
-  --color-moss: #4d6457;
-  --color-sage: #a9bbae;
-  --color-sage-light: #cfdad1;
-  --color-copper: #c2703d;
-  --color-line: #d3dad3;
-  --color-line-dark: #2b3732;
+  /* midnight black: primary */
+  --color-bg: #05060d;
+  --color-bg-2: #080b17;
+  --color-surface: #0e1324;
+  --color-surface-2: #151c33;
+  --color-border: #222b45;
+  --color-text: #eef1f8;
+  --color-muted: #8e97b0;
+  --color-dim: #5a6383;
+  /* electric blue: secondary */
+  --color-blue: #2e6bff;
+  --color-blue-soft: #6d97ff;
+  /* cantaloupe orange: accent */
+  --color-orange: #ffa466;
+  --color-orange-deep: #f2793a;
+  /* status */
+  --color-green: #4cd58a;
+  --color-rose: #ff6f7d;
 
-  --font-sans: "neue-haas-grotesk-display", var(--font-switzer), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-switzer), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-poppins), var(--font-switzer), sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 4.5rem;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-sans);
-  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-sage-light);
-  color: var(--color-ink);
+  background: var(--color-orange);
+  color: var(--color-bg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-copper);
+  outline: 2px solid var(--color-orange);
   outline-offset: 3px;
   border-radius: 6px;
 }
 
 /* ---------- type ---------- */
 
-/* Big, light, tightly tracked headlines */
-.headline {
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 0.96;
-}
-/* The point at the end of a headline */
-.pt {
-  color: var(--color-copper);
-}
-/* Small tracked label, used for nav and card links */
-.label {
-  font-size: 0.75rem;
+.display {
   font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.fluid-body {
-  font-size: clamp(1.02rem, 0.95rem + 0.32vw, 1.2rem);
+  letter-spacing: -0.04em;
+  line-height: 0.98;
 }
 
 p, li, dd {
   hyphens: auto;
-  hyphenate-limit-chars: 12 5 5; /* only long words, never the brand name */
+  hyphenate-limit-chars: 12 5 5;
   text-wrap: pretty;
 }
-h1, h2, h3, h4 {
+h1, h2, h3 {
   hyphens: manual;
   text-wrap: balance;
+}
+
+.fluid-body {
+  font-size: clamp(1.02rem, 0.95rem + 0.32vw, 1.22rem);
 }
 
 .trim {
   text-box: trim-both cap alphabetic;
 }
 
-.ul {
-  text-decoration-line: underline;
-  text-decoration-thickness: 0.07em;
-  text-underline-offset: 0.22em;
-  text-decoration-skip-ink: auto;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
-  transition: text-decoration-color 0.2s;
-}
-.ul:hover {
-  text-decoration-color: currentColor;
-}
-
-/* Switzer has no true small caps, so acronyms are set a touch smaller instead of synthesized */
+/* Switzer has no true small caps, so acronyms are set a touch smaller */
 .acr {
   font-size: 0.86em;
   letter-spacing: 0.03em;
 }
 
-sup {
-  line-height: 0;
-  vertical-align: baseline;
-  position: relative;
-  top: -0.5em;
-  margin-inline-start: 0.15em;
-}
-
-.reserve {
-  display: inline-grid;
-}
-.reserve::after {
-  content: attr(data-text);
-  font-weight: 600;
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-  user-select: none;
+/* Grain overlay for gradient backgrounds */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
 /* ---------- motion ---------- */
 
-@keyframes drift-a {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(-1.5%, 1%) rotate(-1.2deg); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
-@keyframes drift-b {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(1.2%, -1.4%) rotate(1deg); }
+.marquee {
+  animation: marquee 38s linear infinite;
 }
+.marquee-wrap:hover .marquee {
+  animation-play-state: paused;
+}
+
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: none; }
 }
-@keyframes ping {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(3.2); opacity: 0; }
-}
-.drift-a { animation: drift-a 18s ease-in-out infinite; transform-origin: 70% 50%; }
-.drift-b { animation: drift-b 22s ease-in-out infinite; transform-origin: 70% 50%; }
 .rise { animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.ping { animation: ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite; transform-origin: center; transform-box: fill-box; }
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.caret { animation: blink 1s steps(1) infinite; }
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.pulse-ring { animation: pulse-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -148,4 +129,32 @@ sup {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* the mark's bars breathe like a live waveform */
+@keyframes bar {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.72); }
+}
+.mark-bar {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bar 1.6s ease-in-out infinite;
+}
+
+/* stacked layers: fade the covered one out, the arriving one in */
+[data-stack] > [data-stack-content] {
+  opacity: min(var(--in, 1), calc(1 - var(--out, 0) * 1.15));
+  transform: scale(calc(1 - var(--out, 0) * 0.06)) translateY(calc(var(--out, 0) * -36px + (1 - var(--in, 1)) * 40px));
+  filter: blur(calc(var(--out, 0) * 6px));
+  will-change: opacity, transform;
+}
+[data-stack]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: #000;
+  opacity: calc(var(--out, 0) * 0.7);
 }
