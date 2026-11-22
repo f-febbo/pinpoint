@@ -1,11 +1,4 @@
-/** The pinpoint wordmark: lowercase, medium weight, wide tracking. */
+/** The pinpoint wordmark, set in Poppins. The icon mark sits to its left once designed. */
 export function Wordmark({ className = "" }: { className?: string }) {
-  return (
-    <span
-      className={`inline-block font-medium lowercase ${className}`}
-      style={{ letterSpacing: "0.24em", marginRight: "-0.24em" }}
-    >
-      pinpoint
-    </span>
-  );
+  return <span className={`font-logo inline-block font-semibold lowercase tracking-[-0.02em] ${className}`}>pinpoint</span>;
 }

@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-// Switzer by Indian Type Foundry, via Fontshare (ITF Free Font License).
-// A free stand-in for Neue Haas Grotesk Display, which is listed first in the
-// font stack so it takes over if an Adobe Fonts kit for it is ever added.
+// Switzer by Indian Type Foundry, via Fontshare (ITF Free Font License)
 const switzer = localFont({
   src: "./fonts/Switzer-Variable.woff2",
   variable: "--font-switzer",
@@ -12,19 +11,26 @@ const switzer = localFont({
   display: "swap",
 });
 
+// Poppins is used for the wordmark only
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["600"],
+});
+
 export const metadata: Metadata = {
   title: "pinpoint: everything you need, in one place",
   description:
-    "pinpoint connects your calendars, inbox and chats so you always know where to be, what you promised, and where everything is.",
+    "pinpoint is a pin you wear and an app you check. It keeps track of where you need to be, what you said you’d do, and everything in between.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f1f2ee",
+  themeColor: "#05060d",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${switzer.variable} antialiased`}>
+    <html lang="en" className={`${switzer.variable} ${poppins.variable} antialiased`}>
       <body className="min-h-full">{children}</body>
     </html>
   );
