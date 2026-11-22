@@ -1,4 +1,4 @@
-/* Official brand marks (SVG Logos / vscode-icons via Iconify). Shown as supported integrations. */
+/* Official brand marks (SVG Logos / vscode-icons via Iconify), tinted to one scheme. */
 export const integrations = [
   { file: "microsoft-outlook", name: "Outlook" },
   { file: "google-calendar", name: "Google Calendar" },
@@ -11,11 +11,29 @@ export const integrations = [
   { file: "google-drive", name: "Google Drive" },
 ] as const;
 
-export type BrandFile = (typeof integrations)[number]["file"];
+export type BrandFile = (typeof integrations)[number]["file"] | "claude" | "openai";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-export function Logo({ file, className = "size-5", alt = "" }: { file: BrandFile; className?: string; alt?: string }) {
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src={`${base}/logos/${file}.svg`} alt={alt} className={`shrink-0 object-contain ${className}`} draggable={false} />;
+export function Logo({
+  file,
+  className = "size-5",
+  alt = "",
+  tone = "site",
+}: {
+  file: BrandFile;
+  className?: string;
+  alt?: string;
+  tone?: "site" | "app";
+}) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`${base}/logos/${file}.svg`}
+      alt={alt}
+      draggable={false}
+      className={`shrink-0 object-contain ${className}`}
+      style={{ filter: `url(#duo-${tone})` }}
+    />
+  );
 }

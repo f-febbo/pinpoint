@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
+import { SvgFilters } from "@/components/landing/svg-filters";
 import "./globals.css";
 
 // Switzer by Indian Type Foundry, via Fontshare (ITF Free Font License)
@@ -31,7 +32,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${switzer.variable} ${poppins.variable} antialiased`}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <SvgFilters />
+        {children}
+      </body>
     </html>
   );
 }
