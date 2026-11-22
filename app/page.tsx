@@ -8,7 +8,6 @@ export default function Home() {
     <>
       <Nav />
       <main>
-        {/* hero and frames stack: each new layer slides up over the last, ending on the form */}
         <Hero />
         <Frames />
         <Feedback />
