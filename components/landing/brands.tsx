@@ -1,60 +1,21 @@
-import { brandPaths } from "@/lib/brand-paths";
+/* Official brand marks (SVG Logos / vscode-icons via Iconify). Shown as supported integrations. */
+export const integrations = [
+  { file: "microsoft-outlook", name: "Outlook" },
+  { file: "google-calendar", name: "Google Calendar" },
+  { file: "google-gmail", name: "Gmail" },
+  { file: "microsoft-teams", name: "Microsoft Teams" },
+  { file: "slack-icon", name: "Slack" },
+  { file: "zoom-icon", name: "Zoom" },
+  { file: "google-meet", name: "Google Meet" },
+  { file: "notion-icon", name: "Notion" },
+  { file: "google-drive", name: "Google Drive" },
+] as const;
 
-export type Brand =
-  | "outlook"
-  | "googleCalendar"
-  | "gmail"
-  | "teams"
-  | "slack"
-  | "googleMeet"
-  | "notion"
-  | "googleDrive";
+export type BrandFile = (typeof integrations)[number]["file"];
 
-export const brandName: Record<Brand, string> = {
-  outlook: "Outlook",
-  googleCalendar: "Google Calendar",
-  gmail: "Gmail",
-  teams: "Teams",
-  slack: "Slack",
-  googleMeet: "Google Meet",
-  notion: "Notion",
-  googleDrive: "Google Drive",
-};
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/** Monochrome brand mark. Microsoft marks aren't in Simple Icons, so they get a plain letter tile. */
-export function BrandIcon({ brand, className = "size-5" }: { brand: Brand; className?: string }) {
-  if (brand === "outlook" || brand === "teams") {
-    return (
-      <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
-        <rect x="2" y="2" width="20" height="20" rx="5" />
-        <text
-          x="12"
-          y="16.6"
-          textAnchor="middle"
-          fontSize="13"
-          fontWeight="700"
-          fill="var(--color-paper)"
-          fontFamily="var(--font-sans)"
-        >
-          {brand === "outlook" ? "O" : "T"}
-        </text>
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
-      <path d={brandPaths[brand]} />
-    </svg>
-  );
+export function Logo({ file, className = "size-5", alt = "" }: { file: BrandFile; className?: string; alt?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={`${base}/logos/${file}.svg`} alt={alt} className={`shrink-0 object-contain ${className}`} draggable={false} />;
 }
-
-export const integrations: Brand[] = [
-  "outlook",
-  "googleCalendar",
-  "gmail",
-  "teams",
-  "slack",
-  "googleMeet",
-  "notion",
-  "googleDrive",
-];
