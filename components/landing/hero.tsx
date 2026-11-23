@@ -69,8 +69,9 @@ const phoneTrack: Track = {
 };
 
 const focus = (size: number) => ({
-  blur: Math.max(0, (0.98 - size) * 9),
-  opacity: Math.min(1, 0.45 + ((size - 0.78) / 0.22) * 0.55),
+  // just a hint of softness on far cards; depth comes mostly from size and dimming
+  blur: Math.max(0, (0.98 - size) * 2.5),
+  opacity: Math.min(1, 0.6 + ((size - 0.78) / 0.22) * 0.4),
 });
 
 function Notification({ n, glass }: { n: Note; glass: boolean }) {
@@ -241,7 +242,7 @@ export function Hero() {
       <div className="relative isolate flex flex-1 flex-col">
         {/* desktop: the two cascades run the full height, from the menu bar down, close in on the pin */}
         <div
-          className="absolute inset-0 -z-10 hidden opacity-60 lg:grid lg:grid-cols-[1fr_272px_1fr]"
+          className="absolute inset-0 -z-10 hidden opacity-80 lg:grid lg:grid-cols-[1fr_272px_1fr]"
           style={{ maskImage: "linear-gradient(180deg, #000 30%, rgba(0,0,0,0.15) 38%, rgba(0,0,0,0.15) 52%, #000 60%)" }}
         >
           <Cascade notes={raw} side="left" track={leftTrack} />
