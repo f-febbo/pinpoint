@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Mark } from "./mark";
 import { Wordmark } from "./wordmark";
 
@@ -17,9 +17,23 @@ function Halo() {
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const [solid, setSolid] = useState(false);
+
+  // transparent over the hero, solid once you've scrolled past it
+  useEffect(() => {
+    const hero = document.getElementById("top");
+    if (!hero) return;
+    const io = new IntersectionObserver(([e]) => setSolid(!e.isIntersecting), { rootMargin: "-72px 0px 0px 0px" });
+    io.observe(hero);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-300 ${
+        solid ? "border-white/[0.08] bg-bg" : "border-transparent bg-transparent"
+      }`}
+    >
       <nav aria-label="Main" className="isolate flex h-[72px] items-center justify-between px-5 sm:px-8 lg:px-10">
         <a href="#top" className="relative flex items-center gap-2.5 text-[1.3rem] text-white" aria-label="pinpoint home">
           <Halo />
