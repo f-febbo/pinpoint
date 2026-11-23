@@ -213,7 +213,7 @@ export function Feedback() {
     <section
       id="feedback"
       aria-labelledby="feedback-title"
-      className="grain relative z-10 overflow-hidden rounded-t-[36px] bg-bg shadow-[0_-30px_80px_rgba(0,0,0,0.6)]"
+      className="grain relative overflow-hidden bg-bg"
     >
       <div
         aria-hidden
