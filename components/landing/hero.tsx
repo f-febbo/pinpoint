@@ -182,7 +182,7 @@ export function Hero() {
       {/* keep the title calm and the edges dark */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(5,6,13,0.85),transparent_70%),radial-gradient(140%_100%_at_50%_60%,transparent_70%,rgba(5,6,13,0.3))]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(5,6,13,0.85),transparent_70%)]"
       />
 
       <div data-stack-content className="relative isolate flex flex-1 flex-col">

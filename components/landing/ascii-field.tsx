@@ -73,11 +73,14 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
             Math.sin((i + j) * 0.09 + t * 0.3) * 0.6;
           const ring = Math.sin(d / 18 - t * 1.6) * 0.5 + 0.5; // ripples moving outward
           const glow = Math.exp(-((d / glowR) ** 2));
-          // gentle falloff toward the edges and corners, never fully gone
+          // brightness from the center out: high at the pin, low in between, high again
+          // toward the rectangular edges of the screen, where it pulses too
           const ex = Math.abs(x / w - 0.5) * 2;
-          const ey = Math.abs(y / h - 0.55) * 2;
-          const fade = 1 - Math.min(1, Math.hypot(ex, ey) / 1.5) * 0.45;
-          let b = (0.3 + 0.1 * n + glow * (0.3 + 0.25 * ring)) * fade;
+          const ey = Math.abs(y / h - 0.5) * 2;
+          const rect = Math.max(ex, ey);
+          const edge = Math.min(1, Math.max(0, (rect - 0.45) / 0.5)) ** 1.2;
+          const pulse = Math.sin(rect * 9 - t * 1.4) * 0.5 + 0.5;
+          let b = 0.14 + 0.08 * n + glow * (0.3 + 0.25 * ring) + edge * (0.42 + 0.32 * pulse);
           if (b < 0.08) continue;
           b = Math.min(1, b);
 
@@ -131,15 +134,15 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
         }
       }
 
-      // the pin's status light, in the accent color
+      // the pin's status light: green while it's listening
       const lx = pin.x + pin.r * 0.52;
       const ly = pin.y + pin.r * 0.56;
       const on = reduce ? 1 : 0.8 + 0.2 * Math.sin(t * 3);
       const gx = Math.round(lx / P) * P;
       const gy = Math.round(ly / P) * P;
-      ctx.fillStyle = `rgba(255,164,102,${0.3 * on})`;
+      ctx.fillStyle = `rgba(76,213,138,${0.3 * on})`;
       ctx.fillRect(gx - P, gy - P, P * 4 - 1, P * 4 - 1);
-      ctx.fillStyle = `rgba(255,164,102,${on})`;
+      ctx.fillStyle = `rgba(76,213,138,${on})`;
       ctx.fillRect(gx + 0.5, gy + 0.5, P * 2 - 1, P * 2 - 1);
     };
 
