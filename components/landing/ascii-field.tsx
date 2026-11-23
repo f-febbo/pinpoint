@@ -80,7 +80,7 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
           const rect = Math.max(ex, ey);
           const edge = Math.min(1, Math.max(0, (rect - 0.45) / 0.5)) ** 1.2;
           const pulse = Math.sin(rect * 9 - t * 1.4) * 0.5 + 0.5;
-          let b = 0.14 + 0.08 * n + glow * (0.3 + 0.25 * ring) + edge * (0.42 + 0.32 * pulse);
+          let b = 0.14 + 0.08 * n + glow * (0.3 + 0.25 * ring) + edge * (0.29 + 0.22 * pulse); // ~30% dimmer than the center
           if (b < 0.08) continue;
           b = Math.min(1, b);
 
