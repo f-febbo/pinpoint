@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { AsciiField } from "./ascii-field";
-import { Logo, type BrandFile } from "./brands";
+import { integrations, Logo, type BrandFile } from "./brands";
 import { Mark } from "./mark";
 
 type Note = { icon: BrandFile | "pinpoint"; from: string; subject?: string; body: string; time: string };
@@ -32,26 +32,44 @@ const smart: Note[] = [
   { icon: "pinpoint", from: "Board Prep in 10 Min", body: "Notes from today’s budget review are attached.", time: "34m ago" },
 ];
 
-// Each card has its own size and speed. Size sets the depth of field: smaller
-// reads as farther away, so it's blurrier, dimmer and slower.
-type Lane = { x: number; size: number; secs: number; at: number };
-const lanes: Lane[] = [
-  { x: 6, size: 1.02, secs: 15, at: 0 },
-  { x: 42, size: 0.68, secs: 31, at: 0.08 },
-  { x: 20, size: 0.86, secs: 21, at: 0.2 },
-  { x: 34, size: 0.97, secs: 17, at: 0.33 },
-  { x: 0, size: 0.62, secs: 36, at: 0.45 },
-  { x: 26, size: 0.78, secs: 25, at: 0.56 },
-  { x: 12, size: 0.93, secs: 18, at: 0.68 },
-  { x: 40, size: 0.72, secs: 28, at: 0.8 },
-  { x: 4, size: 0.84, secs: 22, at: 0.91 },
-];
-const phoneLanes: Lane[] = lanes.map((l, i) => ({ ...l, x: [0, 4, 2, 6, 0, 3, 5, 2, 1][i] }));
+// Each side falls at its own pace, so the two never move in step. Within a side
+// every card shares the same timing, so cards never slide over one another;
+// they zigzag left and right, and size sets the depth of field.
+type Slot = { x: number; size: number; at: number };
+type Track = { secs: number; slots: Slot[] };
+const leftTrack: Track = {
+  secs: 26,
+  slots: [
+    { x: 4, size: 1, at: 0 },
+    { x: 44, size: 0.84, at: 0.2 },
+    { x: 18, size: 0.93, at: 0.4 },
+    { x: 48, size: 0.8, at: 0.6 },
+    { x: 0, size: 0.89, at: 0.8 },
+  ],
+};
+const rightTrack: Track = {
+  secs: 31,
+  slots: [
+    { x: 40, size: 0.88, at: 0.1 },
+    { x: 2, size: 1, at: 0.3 },
+    { x: 48, size: 0.82, at: 0.5 },
+    { x: 14, size: 0.95, at: 0.7 },
+    { x: 30, size: 0.86, at: 0.9 },
+  ],
+};
+const phoneTrack: Track = {
+  secs: 24,
+  slots: [
+    { x: 0, size: 1, at: 0 },
+    { x: 6, size: 0.86, at: 0.25 },
+    { x: 2, size: 0.93, at: 0.5 },
+    { x: 7, size: 0.84, at: 0.75 },
+  ],
+};
 
 const focus = (size: number) => ({
   blur: Math.max(0, (0.98 - size) * 9),
-  opacity: Math.min(1, 0.3 + ((size - 0.6) / 0.4) * 0.7),
-  z: Math.round(size * 10),
+  opacity: Math.min(1, 0.45 + ((size - 0.78) / 0.22) * 0.55),
 });
 
 function Notification({ n, glass }: { n: Note; glass: boolean }) {
@@ -66,8 +84,8 @@ function Notification({ n, glass }: { n: Note; glass: boolean }) {
           <Mark className="size-5 text-white" />
         </span>
       ) : (
-        <span className="grid size-[38px] shrink-0 place-items-center rounded-[9px] bg-white/[0.92]">
-          <Logo file={n.icon} className="size-6" />
+        <span className="grid size-[38px] shrink-0 place-items-center rounded-[9px] bg-white">
+          <Logo file={n.icon} tone="original" className="size-6" />
         </span>
       )}
       <div className="min-w-0 flex-1">
@@ -82,30 +100,42 @@ function Notification({ n, glass }: { n: Note; glass: boolean }) {
   );
 }
 
-/** Notifications falling at varied depths of field, accelerating and fading toward the bottom. */
-function Cascade({ notes, side, set = lanes }: { notes: Note[]; side: "left" | "right"; set?: Lane[] }) {
+/** Notifications falling at varied depths of field, picking up speed and fading toward the bottom. */
+function Cascade({ notes, side, track }: { notes: Note[]; side: "left" | "right"; track: Track }) {
+  // each time a slot loops back to the top it takes the next unused notification,
+  // so the cards on screen are always different
+  const [shown, setShown] = useState(() => track.slots.map((_, i) => i));
+  const next = useRef(track.slots.length);
   return (
     <div
       className="relative h-full overflow-hidden"
       style={{
-        maskImage: `linear-gradient(180deg, transparent 0%, #000 12%, #000 55%, transparent 96%), linear-gradient(${
+        maskImage: `linear-gradient(180deg, transparent 0%, #000 7%, #000 58%, transparent 96%), linear-gradient(${
           side === "left" ? "90deg" : "270deg"
-        }, #000 86%, transparent 100%)`,
+        }, #000 90%, transparent 100%)`,
         maskComposite: "intersect",
       }}
     >
-      {set.map((l, i) => {
+      {track.slots.map((l, i) => {
         const D = focus(l.size);
         const style = {
           left: side === "left" ? `${l.x}%` : undefined,
           right: side === "right" ? `${l.x}%` : undefined,
-          zIndex: D.z,
-          animationDuration: `${l.secs}s`,
-          animationDelay: `${-l.at * l.secs}s`,
-          "--rest": `${10 + l.at * 70}%`,
+          zIndex: Math.round(l.size * 10),
+          animationDuration: `${track.secs}s`,
+          animationDelay: `${-l.at * track.secs}s`,
+          "--rest": `${8 + l.at * 72}%`,
         } as CSSProperties;
         return (
-          <div key={i} className="fall absolute top-0 h-full" style={style}>
+          <div
+            key={i}
+            className="fall absolute top-0 h-full"
+            style={style}
+            onAnimationIteration={() => {
+              const k = next.current++;
+              setShown((v) => v.map((c, j) => (j === i ? k : c)));
+            }}
+          >
             <div
               style={{
                 transform: `scale(${l.size})`,
@@ -114,11 +144,27 @@ function Cascade({ notes, side, set = lanes }: { notes: Note[]; side: "left" | "
                 opacity: D.opacity,
               }}
             >
-              <Notification n={notes[i % notes.length]} glass={l.size >= 0.92} />
+              <Notification n={notes[shown[i] % notes.length]} glass={l.size >= 0.92} />
             </div>
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function Compatible() {
+  return (
+    <div className="relative flex flex-col items-center gap-3">
+      <span aria-hidden className="absolute -inset-x-8 -inset-y-5 -z-10 rounded-full bg-bg/70 blur-xl" />
+      <p className="text-[13px] font-medium text-white/80">Compatible With</p>
+      <ul className="flex items-center justify-center gap-3.5 sm:gap-5">
+        {integrations.map((b) => (
+          <li key={b.file} title={b.name}>
+            <Logo file={b.file} alt={b.name} className="size-6 sm:size-8" />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -136,33 +182,37 @@ export function Hero() {
       {/* keep the title calm and the edges dark */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(5,6,13,0.85),transparent_70%),radial-gradient(130%_90%_at_50%_60%,transparent_60%,rgba(5,6,13,0.45))]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(5,6,13,0.85),transparent_70%),radial-gradient(140%_100%_at_50%_60%,transparent_70%,rgba(5,6,13,0.3))]"
       />
 
-      <div data-stack-content className="relative flex flex-1 flex-col">
-        <h1 id="hero-title" className="display rise px-5 pt-32 text-center text-[clamp(2.6rem,6.4vw,5.8rem)] sm:pt-36">
-          your day, pinpointed.
-        </h1>
+      <div data-stack-content className="relative isolate flex flex-1 flex-col">
+        {/* desktop: the two cascades run the full height, from the menu bar down, close in on the pin */}
+        <div className="absolute inset-0 -z-10 hidden lg:grid lg:grid-cols-[1fr_272px_1fr]">
+          <Cascade notes={raw} side="left" track={leftTrack} />
+          <div />
+          <Cascade notes={smart} side="right" track={rightTrack} />
+        </div>
 
-        <div className="relative mt-6 grid flex-1 grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-[1fr_auto_1fr] lg:grid-rows-1">
-          <div className="hidden lg:block">
-            <Cascade notes={raw} side="left" />
-          </div>
-          <div className="grid place-items-center px-10 py-4 lg:py-0">
-            <div ref={pin} className="size-[180px] rounded-full lg:size-[240px]" aria-hidden />
-            <span className="sr-only">
-              Pinpoint turns the notifications your apps send into ones that tell you what to do next.
-            </span>
-          </div>
-          <div className="hidden lg:block">
-            <Cascade notes={smart} side="right" />
-          </div>
-          {/* phones: just what Pinpoint sends */}
-          <div className="relative min-h-[300px] lg:hidden">
-            <div className="absolute inset-0 flex justify-center">
-              <div className="relative h-full w-[340px]">
-                <Cascade notes={smart} side="left" set={phoneLanes} />
-              </div>
+        <div className="relative mx-auto pt-32 sm:pt-36">
+          <span aria-hidden className="absolute inset-x-[-6%] bottom-[-18%] top-[28%] -z-10 rounded-full bg-bg/70 blur-2xl" />
+          <h1 id="hero-title" className="display rise px-5 text-center text-[clamp(2.6rem,6.4vw,5.8rem)]">
+            your day, pinpointed.
+          </h1>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center gap-8 lg:mt-12 lg:gap-9">
+          <div ref={pin} className="size-[180px] rounded-full lg:size-[232px]" aria-hidden />
+          <span className="sr-only">
+            Pinpoint turns the notifications your apps send into ones that tell you what to do next.
+          </span>
+          <Compatible />
+        </div>
+
+        {/* phones: just what Pinpoint sends */}
+        <div className="relative mt-4 min-h-[300px] flex-1 lg:hidden">
+          <div className="absolute inset-0 flex justify-center">
+            <div className="relative h-full w-[340px]">
+              <Cascade notes={smart} side="left" track={phoneTrack} />
             </div>
           </div>
         </div>

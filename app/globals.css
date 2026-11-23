@@ -211,8 +211,8 @@ body {
   from { transform: translateY(-18%); }
   to { transform: translateY(100%); }
 }
-/* ease-in: drifts near the top, then accelerates out the bottom */
-.fall { animation: fall cubic-bezier(0.45, 0, 0.9, 0.55) infinite; }
+/* gentle ease-in: drifts near the top, then picks up speed toward the bottom */
+.fall { animation: fall cubic-bezier(0.45, 0.35, 0.8, 0.75) infinite; }
 @media (prefers-reduced-motion: reduce) {
   .fall { animation: none; transform: translateY(var(--rest)); }
 }

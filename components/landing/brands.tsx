@@ -1,4 +1,4 @@
-/* Official brand marks (SVG Logos / vscode-icons via Iconify), tinted to one scheme. */
+/* Official brand marks (SVG Logos / vscode-icons via Iconify), tinted to one scheme unless tone is "original". */
 export const integrations = [
   { file: "microsoft-outlook", name: "Outlook" },
   { file: "google-calendar", name: "Google Calendar" },
@@ -24,7 +24,7 @@ export function Logo({
   file: BrandFile;
   className?: string;
   alt?: string;
-  tone?: "site" | "app";
+  tone?: "site" | "app" | "original";
 }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -33,7 +33,7 @@ export function Logo({
       alt={alt}
       draggable={false}
       className={`shrink-0 object-contain ${className}`}
-      style={{ filter: `url(#duo-${tone})` }}
+      style={tone === "original" ? undefined : { filter: `url(#duo-${tone})` }}
     />
   );
 }
