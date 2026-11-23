@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { AsciiField } from "./ascii-field";
 import { integrations, Logo, type BrandFile } from "./brands";
 import { Mark } from "./mark";
@@ -169,25 +170,80 @@ function Compatible() {
   );
 }
 
+/**
+ * The story in one loop: an app's notification is pulled into the pin, and the
+ * Pinpoint version comes out the other side. Cycles through every pair.
+ */
+const CYCLE = 4400;
+function Converter({ burst }: { burst: RefObject<number> }) {
+  const [k, setK] = useState(0);
+  const still = useReducedMotion();
+
+  useEffect(() => {
+    if (still) return;
+    let absorb: ReturnType<typeof setTimeout>;
+    const fire = () => {
+      clearTimeout(absorb);
+      absorb = setTimeout(() => (burst.current = performance.now()), CYCLE / 2);
+    };
+    fire();
+    const id = setInterval(() => {
+      setK((v) => v + 1);
+      fire();
+    }, CYCLE);
+    return () => {
+      clearInterval(id);
+      clearTimeout(absorb);
+    };
+  }, [burst, still]);
+
+  const i = k % raw.length;
+  const cls = still ? "cv-still" : "cv";
+  return (
+    <div className="pointer-events-none absolute left-1/2 top-1/2 hidden lg:block" aria-hidden>
+      {/* the paths in and out of the pin */}
+      <span className="absolute left-[-210px] top-0 h-px w-[90px] bg-gradient-to-r from-white/0 to-white/40" />
+      <span className="absolute left-[120px] top-0 h-px w-[90px] bg-gradient-to-r from-orange/60 to-white/0" />
+      <div key={k} className="contents">
+        <span className={`${cls} cv-dot-in absolute top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.6)]`} style={{ ["--from" as string]: "-210px", ["--to" as string]: "-120px" }} />
+        <span className={`${cls} cv-dot-out absolute top-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange shadow-[0_0_10px_2px_rgba(255,164,102,0.7)]`} style={{ ["--from" as string]: "120px", ["--to" as string]: "210px" }} />
+        <div className={`${cls} cv-in absolute left-0 top-0 z-10`}>
+          <div className="rounded-[22px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.85)]">
+            <Notification n={raw[i]} glass />
+          </div>
+        </div>
+        <div className={`${cls} cv-out absolute left-0 top-0 z-10`}>
+          <div className="rounded-[22px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,164,102,0.35),0_0_40px_-8px_rgba(255,164,102,0.35)]">
+            <Notification n={smart[i]} glass />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Hero() {
   const pin = useRef<HTMLDivElement>(null);
+  const burst = useRef(0);
   return (
     <section
       id="top"
-      data-stack
       aria-labelledby="hero-title"
-      className="relative flex h-svh min-h-[720px] flex-col overflow-hidden bg-bg lg:sticky lg:top-0"
+      className="relative flex h-svh min-h-[720px] flex-col overflow-hidden bg-bg"
     >
-      <AsciiField anchor={pin} />
+      <AsciiField anchor={pin} burst={burst} />
       {/* keep the title calm and the edges dark */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(5,6,13,0.85),transparent_70%)]"
       />
 
-      <div data-stack-content className="relative isolate flex flex-1 flex-col">
+      <div className="relative isolate flex flex-1 flex-col">
         {/* desktop: the two cascades run the full height, from the menu bar down, close in on the pin */}
-        <div className="absolute inset-0 -z-10 hidden lg:grid lg:grid-cols-[1fr_272px_1fr]">
+        <div
+          className="absolute inset-0 -z-10 hidden opacity-60 lg:grid lg:grid-cols-[1fr_272px_1fr]"
+          style={{ maskImage: "linear-gradient(180deg, #000 30%, rgba(0,0,0,0.15) 38%, rgba(0,0,0,0.15) 52%, #000 60%)" }}
+        >
           <Cascade notes={raw} side="left" track={leftTrack} />
           <div />
           <Cascade notes={smart} side="right" track={rightTrack} />
@@ -201,7 +257,10 @@ export function Hero() {
         </div>
 
         <div className="mt-8 flex flex-col items-center gap-8 lg:mt-12 lg:gap-9">
-          <div ref={pin} className="size-[180px] rounded-full lg:size-[232px]" aria-hidden />
+          <div className="relative">
+            <div ref={pin} className="size-[180px] rounded-full lg:size-[232px]" aria-hidden />
+            <Converter burst={burst} />
+          </div>
           <span className="sr-only">
             Pinpoint turns the notifications your apps send into ones that tell you what to do next.
           </span>

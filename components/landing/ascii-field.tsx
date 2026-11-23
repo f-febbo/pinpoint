@@ -16,7 +16,14 @@ const BARS = [
  * A slow-moving ASCII field with the Pinpoint pin drawn in pixels at its
  * center. The pin's position comes from `anchor`, so layout stays in CSS.
  */
-export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }) {
+export function AsciiField({
+  anchor,
+  burst,
+}: {
+  anchor: RefObject<HTMLElement | null>;
+  /** performance.now() of the latest conversion; sends an accent ripple out from the pin */
+  burst?: RefObject<number>;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -47,6 +54,8 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
     };
 
     const draw = (now: number) => {
+      const age = burst?.current ? (now - burst.current) / 1000 : 99;
+      const wave = age < 1.4 ? { r: pin.r + age * 520, k: 1 - age / 1.4 } : null;
       const t = (now - t0) / 1000;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
@@ -80,7 +89,8 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
           const rect = Math.max(ex, ey);
           const edge = Math.min(1, Math.max(0, (rect - 0.45) / 0.5)) ** 1.2;
           const pulse = Math.sin(rect * 9 - t * 1.4) * 0.5 + 0.5;
-          let b = 0.14 + 0.08 * n + glow * (0.3 + 0.25 * ring) + edge * (0.29 + 0.22 * pulse); // ~30% dimmer than the center
+          const hit = wave ? Math.max(0, 1 - Math.abs(d - wave.r) / 26) * wave.k : 0;
+          let b = hit * 0.7 + 0.14 + 0.08 * n + glow * (0.3 + 0.25 * ring) + edge * (0.29 + 0.22 * pulse); // ~30% dimmer than the center
           if (b < 0.08) continue;
           b = Math.min(1, b);
 
@@ -88,7 +98,7 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
           if (ch === " ") continue;
           // cantaloupe accent: a warm band along the bottom, and the crests of the ripples near the pin
           const crest = ring > 0.9 ? glow * (ring - 0.9) * 10 : 0;
-          const warm = Math.min(1, Math.max(0, (y / h - 0.72) / 0.28) * (1 - glow) + crest);
+          const warm = Math.min(1, Math.max(0, (y / h - 0.72) / 0.28) * (1 - glow) + crest + hit * 1.5);
           const r = Math.round(46 + (255 - 46) * warm);
           const g = Math.round(107 + (164 - 107) * warm);
           const bl = Math.round(255 + (102 - 255) * warm);
@@ -125,7 +135,8 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
           if (bar) {
             ctx.fillStyle = `rgba(238,241,248,${0.9 + 0.1 * Math.abs(jitter)})`;
           } else if (d > pin.r - P * 1.5) {
-            ctx.fillStyle = `rgba(109,151,255,${0.55 + 0.3 * Math.abs(jitter)})`; // rim
+            const flash = age < 0.5 ? 1 - age / 0.5 : 0; // the rim lights up as a notification goes in
+            ctx.fillStyle = `rgba(${Math.round(109 + 146 * flash)},${Math.round(151 + 13 * flash)},${Math.round(255 - 153 * flash)},${0.55 + 0.3 * Math.abs(jitter) + 0.15 * flash})`; // rim
           } else {
             const shade = 0.55 + 0.25 * (1 - d / pin.r) + 0.08 * jitter;
             ctx.fillStyle = `rgba(${Math.round(14 * shade + 8)},${Math.round(20 * shade + 10)},${Math.round(48 * shade + 24)},1)`;
@@ -169,7 +180,7 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
       ro.disconnect();
       io.disconnect();
     };
-  }, [anchor]);
+  }, [anchor, burst]);
 
   return <canvas ref={canvas} aria-hidden className="absolute inset-0 size-full" />;
 }
