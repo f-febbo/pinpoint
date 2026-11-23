@@ -73,14 +73,19 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
             Math.sin((i + j) * 0.09 + t * 0.3) * 0.6;
           const ring = Math.sin(d / 18 - t * 1.6) * 0.5 + 0.5; // ripples moving outward
           const glow = Math.exp(-((d / glowR) ** 2));
-          const fade = 1 - Math.min(1, y / h) * 0.35;
-          let b = (0.2 + 0.09 * n + glow * (0.3 + 0.25 * ring)) * fade;
+          // gentle falloff toward the edges and corners, never fully gone
+          const ex = Math.abs(x / w - 0.5) * 2;
+          const ey = Math.abs(y / h - 0.55) * 2;
+          const fade = 1 - Math.min(1, Math.hypot(ex, ey) / 1.5) * 0.45;
+          let b = (0.3 + 0.1 * n + glow * (0.3 + 0.25 * ring)) * fade;
           if (b < 0.08) continue;
           b = Math.min(1, b);
 
           const ch = RAMP[Math.min(RAMP.length - 1, Math.floor(b * RAMP.length * 1.4))];
           if (ch === " ") continue;
-          const warm = Math.max(0, (y / h - 0.7) / 0.3) * (1 - glow); // cantaloupe toward the bottom
+          // cantaloupe accent: a warm band along the bottom, and the crests of the ripples near the pin
+          const crest = ring > 0.9 ? glow * (ring - 0.9) * 10 : 0;
+          const warm = Math.min(1, Math.max(0, (y / h - 0.72) / 0.28) * (1 - glow) + crest);
           const r = Math.round(46 + (255 - 46) * warm);
           const g = Math.round(107 + (164 - 107) * warm);
           const bl = Math.round(255 + (102 - 255) * warm);
@@ -125,6 +130,17 @@ export function AsciiField({ anchor }: { anchor: RefObject<HTMLElement | null> }
           ctx.fillRect(px + 0.5, py + 0.5, P - 1, P - 1);
         }
       }
+
+      // the pin's status light, in the accent color
+      const lx = pin.x + pin.r * 0.52;
+      const ly = pin.y + pin.r * 0.56;
+      const on = reduce ? 1 : 0.8 + 0.2 * Math.sin(t * 3);
+      const gx = Math.round(lx / P) * P;
+      const gy = Math.round(ly / P) * P;
+      ctx.fillStyle = `rgba(255,164,102,${0.3 * on})`;
+      ctx.fillRect(gx - P, gy - P, P * 4 - 1, P * 4 - 1);
+      ctx.fillStyle = `rgba(255,164,102,${on})`;
+      ctx.fillRect(gx + 0.5, gy + 0.5, P * 2 - 1, P * 2 - 1);
     };
 
     const loop = (now: number) => {
