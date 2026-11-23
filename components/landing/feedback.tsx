@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import form from "@/lib/form.json";
+import { Explainer } from "./explainer";
 import { Mark } from "./mark";
 import { Wordmark } from "./wordmark";
 
@@ -220,12 +221,17 @@ export function Feedback() {
       />
       <div className="relative mx-auto grid max-w-[1200px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <h2 id="feedback-title" className="display trim text-[clamp(2.6rem,5.4vw,4.6rem)]">
-            Help Us Build It Right
-          </h2>
-          <p className="fluid-body mt-8 max-w-sm leading-relaxed text-white">
-            Take a minute to tell us which Pinpoint you’d actually use.
-          </p>
+          <div className="lg:sticky lg:top-28">
+            <h2 id="feedback-title" className="display trim text-[clamp(2.6rem,5.4vw,4.6rem)]">
+              Help Us Build It Right
+            </h2>
+            <p className="fluid-body mt-8 max-w-md leading-relaxed text-white">
+              Watch the two-minute explainer, then tell us which Pinpoint you’d actually use.
+            </p>
+            <div className="mt-10">
+              <Explainer />
+            </div>
+          </div>
         </div>
 
         <div className="lg:col-span-7">
