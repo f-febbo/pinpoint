@@ -208,10 +208,11 @@ body {
 
 /* hero cascade: each card falls the height of its column */
 @keyframes fall {
-  from { transform: translateY(-30%); }
+  from { transform: translateY(-18%); }
   to { transform: translateY(100%); }
 }
-.fall { animation: fall linear infinite; }
+/* ease-in: drifts near the top, then accelerates out the bottom */
+.fall { animation: fall cubic-bezier(0.45, 0, 0.9, 0.55) infinite; }
 @media (prefers-reduced-motion: reduce) {
   .fall { animation: none; transform: translateY(var(--rest)); }
 }

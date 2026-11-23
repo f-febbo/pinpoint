@@ -7,47 +7,52 @@ import { Mark } from "./mark";
 
 type Note = { icon: BrandFile | "pinpoint"; from: string; subject?: string; body: string; time: string };
 
-// what the apps send today
+// what the apps send today, and what Pinpoint sends instead (same index = same event)
 const raw: Note[] = [
-  { icon: "microsoft-outlook", from: "Microsoft Outlook", subject: "Updated: Budget Review", body: "When: Mon 2:30 PM–3:30 PM. Where: Hudson 204", time: "now" },
-  { icon: "google-gmail", from: "Dana Cole", subject: "Re: Re: Fwd: Q3 Renewal", body: "Hi all, circling back on the thread below. Any update on this?", time: "2m ago" },
-  { icon: "google-calendar", from: "Google Calendar", subject: "Design Review", body: "1:00 – 2:00 PM, Studio 3", time: "5m ago" },
-  { icon: "microsoft-teams", from: "Sam Okafor", body: "can u send the deck before the board call", time: "9m ago" },
-  { icon: "slack-icon", from: "#finance", subject: "Priya Raman", body: "ok final Q1 numbers attached, pls review", time: "14m ago" },
-  { icon: "microsoft-outlook", from: "Reminder", subject: "1:1 with Dana", body: "Starts at 3:30 PM", time: "20m ago" },
-  { icon: "zoom-icon", from: "Zoom", subject: "Board Prep", body: "Your meeting is starting soon", time: "31m ago" },
+  { icon: "microsoft-outlook", from: "Microsoft Outlook", subject: "Updated: Budget Review", body: "When: Mon 2:30 PM–3:30 PM (UTC-05:00). Where: Hudson 204", time: "now" },
+  { icon: "google-gmail", from: "Dana Cole", subject: "Re: Re: Fwd: Q3 Renewal", body: "Hi all, just circling back on the thread below. Any update?", time: "2m ago" },
+  { icon: "microsoft-teams", from: "Sam Okafor", body: "can u send the deck before the board call 🙏", time: "4m ago" },
+  { icon: "google-calendar", from: "Design Review", body: "1:00 – 2:00 PM, Studio 3", time: "6m ago" },
+  { icon: "slack-icon", from: "#finance", subject: "Priya Raman", body: "final Q1 numbers attached, pls review when u get a sec", time: "11m ago" },
+  { icon: "google-gmail", from: "Gmail", subject: "4 new messages", body: "Northwind Print, LinkedIn, Dana Cole, and 1 more", time: "15m ago" },
+  { icon: "microsoft-outlook", from: "Reminder", subject: "1:1 with Dana", body: "3:30 PM, Microsoft Teams Meeting", time: "22m ago" },
+  { icon: "notion-icon", from: "Jordan mentioned you", subject: "Launch Plan", body: "@you can you own the timeline for this?", time: "28m ago" },
+  { icon: "zoom-icon", from: "Zoom", subject: "Board Prep", body: "Your meeting is starting soon", time: "34m ago" },
 ];
 
-// what Pinpoint sends instead
 const smart: Note[] = [
   { icon: "pinpoint", from: "Leave by 2:18", body: "Budget review moved to Hudson 204, a 12 min walk away.", time: "now" },
-  { icon: "pinpoint", from: "Reply to Dana", body: "She’s waited two days for your answer on the Q3 renewal.", time: "2m ago" },
-  { icon: "pinpoint", from: "Bring the Budget Doc", body: "Design review starts at 1:00 in Studio 3.", time: "5m ago" },
-  { icon: "pinpoint", from: "You Owe Sam the Deck", body: "He needs it before the 4:30 board call.", time: "9m ago" },
-  { icon: "pinpoint", from: "Q1 Numbers Are In", body: "Priya needs your review by Friday.", time: "14m ago" },
-  { icon: "pinpoint", from: "Clash at 3:30", body: "Your 1:1 with Dana overlaps the dentist. Move it to Tuesday?", time: "20m ago" },
-  { icon: "pinpoint", from: "Board Prep Is Ready", body: "Notes from today’s review are attached to the invite.", time: "31m ago" },
+  { icon: "pinpoint", from: "Dana Is Waiting on You", body: "She asked for your Q3 renewal answer two days ago.", time: "2m ago" },
+  { icon: "pinpoint", from: "Send Sam the Deck", body: "He needs it before the 4:30 board call.", time: "4m ago" },
+  { icon: "pinpoint", from: "Bring the Budget Doc", body: "Design review picks up where Friday’s call left off.", time: "6m ago" },
+  { icon: "pinpoint", from: "Review Q1 by Friday", body: "Priya shared the final numbers in #finance.", time: "11m ago" },
+  { icon: "pinpoint", from: "One Email Matters", body: "Northwind’s invoice #2291 is 9 days overdue.", time: "15m ago" },
+  { icon: "pinpoint", from: "Clash at 3:30", body: "Your 1:1 with Dana overlaps the dentist. Move it to Tuesday?", time: "22m ago" },
+  { icon: "pinpoint", from: "New Task From Jordan", body: "Own the launch plan timeline, due next Wednesday.", time: "28m ago" },
+  { icon: "pinpoint", from: "Board Prep in 10 Min", body: "Notes from today’s budget review are attached.", time: "34m ago" },
 ];
 
-type Depth = "near" | "mid" | "far";
-const depth: Record<Depth, { scale: number; blur: number; opacity: number; secs: number; z: number }> = {
-  near: { scale: 1, blur: 0, opacity: 1, secs: 19, z: 3 },
-  mid: { scale: 0.86, blur: 1.4, opacity: 0.72, secs: 25, z: 2 },
-  far: { scale: 0.72, blur: 3, opacity: 0.45, secs: 33, z: 1 },
-};
-
-// lane (x %), depth and start offset for each card in a column
-type Lane = { x: number; d: Depth; at: number };
+// Each card has its own size and speed. Size sets the depth of field: smaller
+// reads as farther away, so it's blurrier, dimmer and slower.
+type Lane = { x: number; size: number; secs: number; at: number };
 const lanes: Lane[] = [
-  { x: 6, d: "near", at: 0 },
-  { x: 40, d: "far", at: 0.1 },
-  { x: 22, d: "mid", at: 0.26 },
-  { x: 36, d: "near", at: 0.42 },
-  { x: 0, d: "far", at: 0.58 },
-  { x: 14, d: "near", at: 0.72 },
-  { x: 32, d: "mid", at: 0.88 },
+  { x: 6, size: 1.02, secs: 15, at: 0 },
+  { x: 42, size: 0.68, secs: 31, at: 0.08 },
+  { x: 20, size: 0.86, secs: 21, at: 0.2 },
+  { x: 34, size: 0.97, secs: 17, at: 0.33 },
+  { x: 0, size: 0.62, secs: 36, at: 0.45 },
+  { x: 26, size: 0.78, secs: 25, at: 0.56 },
+  { x: 12, size: 0.93, secs: 18, at: 0.68 },
+  { x: 40, size: 0.72, secs: 28, at: 0.8 },
+  { x: 4, size: 0.84, secs: 22, at: 0.91 },
 ];
-const phoneLanes: Lane[] = lanes.map((l, i) => ({ ...l, x: [0, 4, 2, 6, 0, 3, 5][i] }));
+const phoneLanes: Lane[] = lanes.map((l, i) => ({ ...l, x: [0, 4, 2, 6, 0, 3, 5, 2, 1][i] }));
+
+const focus = (size: number) => ({
+  blur: Math.max(0, (0.98 - size) * 9),
+  opacity: Math.min(1, 0.3 + ((size - 0.6) / 0.4) * 0.7),
+  z: Math.round(size * 10),
+});
 
 function Notification({ n, glass }: { n: Note; glass: boolean }) {
   return (
@@ -77,7 +82,7 @@ function Notification({ n, glass }: { n: Note; glass: boolean }) {
   );
 }
 
-/** Notifications falling at three depths of field, fading out toward the bottom. */
+/** Notifications falling at varied depths of field, accelerating and fading toward the bottom. */
 function Cascade({ notes, side, set = lanes }: { notes: Note[]; side: "left" | "right"; set?: Lane[] }) {
   return (
     <div
@@ -90,26 +95,26 @@ function Cascade({ notes, side, set = lanes }: { notes: Note[]; side: "left" | "
       }}
     >
       {set.map((l, i) => {
-        const D = depth[l.d];
+        const D = focus(l.size);
         const style = {
           left: side === "left" ? `${l.x}%` : undefined,
           right: side === "right" ? `${l.x}%` : undefined,
           zIndex: D.z,
-          animationDuration: `${D.secs}s`,
-          animationDelay: `${-l.at * D.secs}s`,
+          animationDuration: `${l.secs}s`,
+          animationDelay: `${-l.at * l.secs}s`,
           "--rest": `${10 + l.at * 70}%`,
         } as CSSProperties;
         return (
           <div key={i} className="fall absolute top-0 h-full" style={style}>
             <div
               style={{
-                transform: `scale(${D.scale})`,
+                transform: `scale(${l.size})`,
                 transformOrigin: side === "left" ? "top left" : "top right",
                 filter: D.blur ? `blur(${D.blur}px)` : undefined,
                 opacity: D.opacity,
               }}
             >
-              <Notification n={notes[i % notes.length]} glass={l.d === "near"} />
+              <Notification n={notes[i % notes.length]} glass={l.size >= 0.92} />
             </div>
           </div>
         );
@@ -136,7 +141,7 @@ export function Hero() {
 
       <div data-stack-content className="relative flex flex-1 flex-col">
         <h1 id="hero-title" className="display rise px-5 pt-32 text-center text-[clamp(2.6rem,6.4vw,5.8rem)] sm:pt-36">
-          Your Day, Pinpointed.
+          your day, pinpointed.
         </h1>
 
         <div className="relative mt-6 grid flex-1 grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-[1fr_auto_1fr] lg:grid-rows-1">
